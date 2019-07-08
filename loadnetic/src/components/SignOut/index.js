@@ -3,12 +3,12 @@ import React from 'react';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from "../../constants/routes";
 
-const SignOutButton = ({ firebase }) => <button type="button" onClick={
-    this.props.firebase
-        .doSignOut
-        .props.history.push(ROUTES.HOME)}
->
+const SignOutButton = ({ firebase }) =>
+    <button type="button" onClick={
+        firebase.doSignOut
+    }>
+        Sign Out
     Sign Out
-</button>;
+    </button>;
 
 export default withFirebase(SignOutButton)
