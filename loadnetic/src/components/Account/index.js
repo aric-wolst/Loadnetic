@@ -2,7 +2,7 @@ import React from 'react';
 
 const AccountPage = () => (
     <div>
-
+        Account
     </div>
 )
 

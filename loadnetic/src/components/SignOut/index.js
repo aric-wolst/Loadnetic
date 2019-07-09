@@ -8,7 +8,6 @@ const SignOutButton = ({ firebase }) =>
         firebase.doSignOut
     }>
         Sign Out
-    Sign Out
     </button>;
 
 export default withFirebase(SignOutButton)
