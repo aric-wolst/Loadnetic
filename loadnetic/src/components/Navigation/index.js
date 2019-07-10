@@ -1,23 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {Navbar, Nav, Button, FormControl, Form} from 'react-bootstrap'
-import './index.css';
+import { Menu } from 'semantic-ui-react'; //Style native from react for creating menus
+
 
 import SignOutButton from '../SignOut';
 import * as ROUTES from '../../constants/routes';
 
 const Navigation = () => (
-        <Navbar bg="primary" variant="dark">
-            <Navbar.Brand href="/">Navbar</Navbar.Brand>
-            <Nav className="mr-auto">
-                <Nav.Link href="/projects">Projects</Nav.Link>
-                <Nav.Link href="/account">Account</Nav.Link>
-                <Nav.Link href="/signin">Sign In</Nav.Link>
-                <li>
-                    <SignOutButton/>
-                </li>
-            </Nav>
-        </Navbar>
+   <Menu secondary pointing> //Secondary pointing refers to the style of menu being used
+   
+   </Menu>
+
 );
 
 export default Navigation;
