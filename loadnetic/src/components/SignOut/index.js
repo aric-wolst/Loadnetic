@@ -3,11 +3,15 @@ import React from 'react';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from "../../constants/routes";
 
-const SignOutButton = ({ firebase }) =>
+const SignOutButton = ({ firebase }) => (
     <button type="button" onClick={
-        firebase.doSignOut
+        function(){
+            firebase.doSignOut();
+            window.location.replace(ROUTES.MAIN)
+        }
     }>
         Sign Out
-    </button>;
+    </button>
+);
 
 export default withFirebase(SignOutButton)
