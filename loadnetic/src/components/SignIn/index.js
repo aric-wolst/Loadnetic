@@ -7,12 +7,34 @@ import { PasswordForgetLink } from '../PasswordForget';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import './index.css';
+
+
 const SignInPage = () => (
     <div>
-        <h1>SignIn</h1>
-        <SignInForm />
-        <PasswordForgetLink />
-        <SignUpLink />
+        <Row className="justify-content-md-center">
+            <Col md = "auto">
+                <h1>SignIn</h1>
+            </Col>
+        </Row>
+        <Row className="justify-content-md-center">
+            <Col md = "auto">
+                <SignInForm />
+            </Col>
+        </Row>
+        <Row className="justify-content-md-center">
+            <Col md = "auto">
+                <PasswordForgetLink />
+            </Col>
+        </Row>
+        <Row className="justify-content-md-center">
+            <Col md = "auto">
+                <SignUpLink />
+            </Col>
+        </Row>
     </div>
 );
 
@@ -56,25 +78,34 @@ class SignInFormBase extends Component {
 
         return (
             <form onSubmit={this.onSubmit}>
-                <input
-                    name="email"
-                    value={email}
-                    onChange={this.onChange}
-                    type="text"
-                    placeholder="Email Address"
-                />
-                <input
-                    name="password"
-                    value={password}
-                    onChange={this.onChange}
-                    type="password"
-                    placeholder="Password"
-                />
-                <button disabled={isInvalid} type="submit">
-                    Sign In
-                </button>
-
-                {error && <p>{error.message}</p>}
+                <Row className="justify-content-md-center">
+                    <Col md = "auto">
+                        <input
+                            name="email"
+                            value={email}
+                            onChange={this.onChange}
+                            type="text"
+                            placeholder="Email Address"
+                        />
+                    </Col>
+                    <Col md = "auto">
+                        <input
+                            name="password"
+                            value={password}
+                            onChange={this.onChange}
+                            type="password"
+                            placeholder="Password"
+                        />
+                    </Col>
+                </Row>
+                <Row className="justify-content-md-center">
+                    <Col md = "auto">
+                        <button className = "login-button" disabled={isInvalid} type="submit">
+                        Log In
+                        </button>
+                    </Col>
+                </Row>
+                    {error && <p>{error.message}</p>}
             </form>
         );
     }
