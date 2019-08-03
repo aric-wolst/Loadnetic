@@ -10,6 +10,7 @@ import * as ROUTES from '../../constants/routes';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 import './index.css';
 
 
@@ -17,24 +18,28 @@ const SignInPage = () => (
     <div>
         <Row className="justify-content-md-center">
             <Col md = "auto">
-                <h1>SignIn</h1>
+                <h1 className="login-header">
+                    Log In
+                </h1>
             </Col>
         </Row>
-        <Row className="justify-content-md-center">
-            <Col md = "auto">
-                <SignInForm />
-            </Col>
-        </Row>
-        <Row className="justify-content-md-center">
-            <Col md = "auto">
-                <PasswordForgetLink />
-            </Col>
-        </Row>
-        <Row className="justify-content-md-center">
-            <Col md = "auto">
-                <SignUpLink />
-            </Col>
-        </Row>
+        <Container className="login-container">
+            <Row className="justify-content-md-center">
+                <Col md = "auto">
+                    <SignInForm />
+                </Col>
+            </Row>
+            <Row className="justify-content-md-center">
+                <Col md = "auto">
+                    <PasswordForgetLink />
+                </Col>
+            </Row>
+            <Row className="justify-content-md-center">
+                <Col md = "auto">
+                    <SignUpLink />
+                </Col>
+            </Row>
+        </Container>
     </div>
 );
 
@@ -78,9 +83,9 @@ class SignInFormBase extends Component {
 
         return (
             <form onSubmit={this.onSubmit}>
-                <Row className="justify-content-md-center">
+                <Row className="justify-content-md-center" id="input-row">
                     <Col md = "auto">
-                        <input
+                        <input id="login-input"
                             name="email"
                             value={email}
                             onChange={this.onChange}
@@ -89,7 +94,7 @@ class SignInFormBase extends Component {
                         />
                     </Col>
                     <Col md = "auto">
-                        <input
+                        <input id="login-input"
                             name="password"
                             value={password}
                             onChange={this.onChange}
@@ -98,9 +103,9 @@ class SignInFormBase extends Component {
                         />
                     </Col>
                 </Row>
-                <Row className="justify-content-md-center">
+                <Row className="justify-content-md-center" id="login-button-row">
                     <Col md = "auto">
-                        <button className = "login-button" disabled={isInvalid} type="submit">
+                        <button className="login-button" disabled={isInvalid} type="submit">
                         Log In
                         </button>
                     </Col>

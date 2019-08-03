@@ -5,10 +5,26 @@ import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+import './signupStyle.css'
+
 const SignUpPage = () => (
     <div>
-        <h1>SignUp</h1>
-        <SignUpForm />
+        <Row className="justify-content-md-center">
+            <Col md="auto">
+                <h1 className="signup-header">Sign Up</h1>
+            </Col>
+        </Row>
+        <Container className="signup-container">
+            <Row className="justify-content-md-center">
+                <Col md="auto">
+                    <SignUpForm />
+                </Col>
+            </Row>
+        </Container>
     </div>
 );
 
@@ -64,37 +80,59 @@ class SignUpFormBase extends Component {
 
         return (
             <form onSubmit={this.onSubmit}>
-                <input
-                    name="username"
-                    value={username}
-                    onChange={this.onChange}
-                    type="text"
-                    placeholder="Full Name"
-                />
-                <input
-                    name="email"
-                    value={email}
-                    onChange={this.onChange}
-                    type="text"
-                    placeholder="Email Address"
-                />
-                <input
-                    name="passwordOne"
-                    value={passwordOne}
-                    onChange={this.onChange}
-                    type="password"
-                    placeholder="Password"
-                />
-                <input
-                    name="passwordTwo"
-                    value={passwordTwo}
-                    onChange={this.onChange}
-                    type="password"
-                    placeholder="Confirm Password"
-                />
-                <button disabled={isInvalid} type="submit">Sign Up</button>
+                <Row clasName="signup-row">
+                    <Col className="signup-col">
+                        <input
+                        name="username"
+                        value={username}
+                        onChange={this.onChange}
+                        type="text"
+                        placeholder="Full Name"
+                        id="signup-input"
+                        />
+                    </Col>
+                </Row>
+                <Row clasName="signup-row">
+                    <Col className="signup-col">
+                        <input
+                        name="email"
+                        value={email}
+                        onChange={this.onChange}
+                        type="text"
+                        placeholder="Email Address"
+                        id="signup-input"
+                        />
+                    </Col>
+                </Row>
+                <Row clasName="signup-row">
+                    <Col className="signup-col">
+                        <input
+                        name="passwordOne"
+                        value={passwordOne}
+                        onChange={this.onChange}
+                        type="password"
+                        placeholder="Password"
+                        id="signup-input"
+                        />
+                    </Col>
+                    <Col className="signup-col">
+                        <input
+                        name="passwordTwo"
+                        value={passwordTwo}
+                        onChange={this.onChange}
+                        type="password"
+                        placeholder="Confirm Password"
+                        id="signup-input"
+                        />
+                    </Col>
+                </Row>
+                <Row className="justify-content-md-center" id="signup-button-row">
+                    <Col md="auto">
+                        <button className="signup-button" disabled={isInvalid} type="submit">Sign Up</button>
 
-                {error && <p>{error.message}</p>}
+                        {error && <p>{error.message}</p>}
+                    </Col>
+                </Row>
             </form>
         );
     }
