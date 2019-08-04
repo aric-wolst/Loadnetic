@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import SignOutButton from '../SignOut';
 import * as ROUTES from '../../constants/routes';
-import { Link } from 'react-router-dom';
+import { Link, withRouter} from 'react-router-dom';
 import { AuthUserContext } from '../Session';
 
 const Navigation = ({ authUser }) => (
@@ -28,7 +28,7 @@ const NavigationAuth = () => (
             <Link to={ROUTES.ACCOUNT}>Account</Link>
         </li>
         <li>
-            <SignOutButton />
+            <SignOutButton className="nav-button" />
         </li>
     </ul>
 );
@@ -39,8 +39,8 @@ const NavigationNonAuth = () => (
             <Link to={ROUTES.MAIN}>Loadnetic</Link>
         </li>
         <li>
-            <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+            <Link to={ROUTES.SIGN_IN}>Log In</Link>
         </li>
     </ul>
 );
-export default Navigation;
+export default withRouter(Navigation);

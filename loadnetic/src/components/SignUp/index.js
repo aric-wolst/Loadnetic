@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import './signupStyle.css'
+import './index.css'
 
 const SignUpPage = () => (
     <div>
@@ -44,7 +44,7 @@ class SignUpFormBase extends Component {
     }
 
     onSubmit = event => {
-        const { username, email, passwordOne } = this.state;
+        const { email, passwordOne } = this.state;
 
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -65,7 +65,6 @@ class SignUpFormBase extends Component {
 
     render() {
         const {
-            username,
             email,
             passwordOne,
             passwordTwo,
@@ -75,23 +74,10 @@ class SignUpFormBase extends Component {
         const isInvalid =
             passwordOne !== passwordTwo ||
             passwordOne === '' ||
-            email === '' ||
-            username === '';
+            email === '';
 
         return (
             <form onSubmit={this.onSubmit}>
-                <Row clasName="signup-row">
-                    <Col className="signup-col">
-                        <input
-                        name="username"
-                        value={username}
-                        onChange={this.onChange}
-                        type="text"
-                        placeholder="Full Name"
-                        id="signup-input"
-                        />
-                    </Col>
-                </Row>
                 <Row clasName="signup-row">
                     <Col className="signup-col">
                         <input
