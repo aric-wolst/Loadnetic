@@ -10,7 +10,7 @@ const SignOutButton = ({ firebase }) => (
             window.location.replace(ROUTES.MAIN)
         }
     }>
-        Sign Out
+        Log Out
     </button>
 );
 

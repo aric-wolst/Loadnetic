@@ -44,10 +44,19 @@ class SignUpFormBase extends Component {
     }
 
     onSubmit = event => {
-        const { email, passwordOne } = this.state;
+        const { username, email, passwordOne } = this.state;
 
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, passwordOne)
+            .then(authUser => {
+                // Create a user in your Firebase realtime database
+                return this.props.firebase
+                    .user(authUser.user.uid)
+                    .set({
+                        username,
+                        email,
+                    });
+            })
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE });
                 this.props.history.push(ROUTES.PROJECTS);
@@ -57,7 +66,7 @@ class SignUpFormBase extends Component {
             });
 
         event.preventDefault();
-    }
+    };
 
     onChange = event => {
         this.setState({ [event.target.name]: event.target.value });
@@ -65,6 +74,7 @@ class SignUpFormBase extends Component {
 
     render() {
         const {
+            username,
             email,
             passwordOne,
             passwordTwo,
@@ -74,10 +84,23 @@ class SignUpFormBase extends Component {
         const isInvalid =
             passwordOne !== passwordTwo ||
             passwordOne === '' ||
-            email === '';
+            email === '' ||
+            username === '';
 
         return (
             <form onSubmit={this.onSubmit}>
+                <Row clasName="signup-row">
+                    <Col className="signup-col">
+                        <input
+                            name="username"
+                            value={username}
+                            onChange={this.onChange}
+                            type="text"
+                            placeholder="Username"
+                            id="signup-input"
+                        />
+                    </Col>
+                </Row>
                 <Row clasName="signup-row">
                     <Col className="signup-col">
                         <input

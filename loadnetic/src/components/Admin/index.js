@@ -1,9 +1,82 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-const AdminPage = () => (
-    <div>
+import { withFirebase } from '../Firebase';
 
-    </div>
-)
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 
-export default AdminPage;
+class AdminPage extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: false,
+            users: [],
+        };
+    }
+
+    componentDidMount() {
+        this.setState({ loading: true });
+
+        this.props.firebase.users().on('value', snapshot => {
+            const usersObject = snapshot.val();
+
+            const usersList = Object.keys(usersObject).map(key => ({
+                uid: key,
+                ...usersObject[key],
+            }));
+
+            this.setState({
+                users: usersList,
+                loading: false,
+            });
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.firebase.users().off();
+    }
+
+    render() {
+        const { users, loading } = this.state;
+
+        return (
+            <div>
+                <h1>Admin</h1>
+
+                {loading && <div>Loading ...</div>}
+
+                <UserList users={users} />
+            </div>
+        );
+    }
+}
+
+const UserList = ({ users }) => (
+    <ul>
+        {users.map(user => (
+            <li key={user.uid}>
+                <Col>
+                    <Row>
+                        <span>
+                        <strong>ID:</strong> {user.uid}
+                        </span>
+                    </Row>
+                    <Row>
+                        <span>
+                        <strong>E-Mail:</strong> {user.email}
+                        </span>
+                    </Row>
+                    <Row>
+                        <span>
+                        <strong>Username:</strong> {user.username}
+                        </span>
+                    </Row>
+                </Col>
+            </li>
+        ))}
+    </ul>
+);
+
+export default withFirebase(AdminPage);

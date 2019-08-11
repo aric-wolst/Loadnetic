@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 
 import { withFirebase } from '../Firebase';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 const INITIAL_STATE = {
     passwordOne: '',
     passwordTwo: '',
@@ -42,23 +46,33 @@ class PasswordChangeForm extends Component {
 
         return (
             <form onSubmit={this.onSubmit}>
-                <input
-                    name="passwordOne"
-                    value={passwordOne}
-                    onChange={this.onChange}
-                    type="password"
-                    placeholder="New Password"
-                />
-                <input
-                    name="passwordTwo"
-                    value={passwordTwo}
-                    onChange={this.onChange}
-                    type="password"
-                    placeholder="Confirm New Password"
-                />
-                <button disabled={isInvalid} type="submit">
-                    Reset My Password
-                </button>
+                <Row className="justify-content-md-center" id="account-input-row">
+                    <Col md = "auto">
+                        <input id="account-input"
+                            name="passwordOne"
+                            value={passwordOne}
+                            onChange={this.onChange}
+                            type="password"
+                            placeholder="New Password"
+                        />
+                    </Col>
+                    <Col md = "auto">
+                        <input id="account-input"
+                            name="passwordTwo"
+                            value={passwordTwo}
+                            onChange={this.onChange}
+                            type="password"
+                            placeholder="Confirm New Password"
+                        />
+                    </Col>
+                </Row>
+                <Row className="justify-content-md-center" id="account-button-row">
+                    <Col md = "auto">
+                        <button className="account-button" disabled={isInvalid} type="submit">
+                            Reset My Password
+                        </button>
+                    </Col>
+                </Row>
 
                 {error && <p>{error.message}</p>}
             </form>
