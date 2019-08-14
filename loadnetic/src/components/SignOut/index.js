@@ -7,7 +7,7 @@ const SignOutButton = ({ firebase }) => (
     <button className="nav-button" type="button" onClick={
         function(){
             firebase.doSignOut();
-            window.location.replace(ROUTES.MAIN)
+            window.location.replace(ROUTES.SIGN_IN)
         }
     }>
         Log Out

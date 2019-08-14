@@ -17,7 +17,14 @@ const AccountPage = () => (
                 <Row className="justify-content-md-center">
                     <Col md = "auto">
                         <h1 className="account-header">
-                            Account: {authUser.email}
+                            Email: {authUser.email}
+                        </h1>
+                    </Col>
+                </Row>
+                <Row className="justify-content-md-center">
+                    <Col md = "auto">
+                        <h1 className="account-header">
+                            Account: {authUser.username}
                         </h1>
                     </Col>
                 </Row>
