@@ -1,38 +1,47 @@
-.App {
-  text-align: center;
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/quicksand/v13/6xKtdSZaM9iE8KbpRA_hK1QN.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.top {
+  background-color: #3a00c5;
+  height: 90px;
+  margin: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.row {
+  padding-top: 19px;
+  padding-bottom: 19px;
+}
+
+.loadnetic {
   color: white;
+  font-size: 35px;
+  font-weight: bold;
+  margin-left: 5%;
+  font-family: "Quicksand", sans-serif;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 60px;
+  padding-bottom: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+#nameCol {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 5%;
+  color: white;
+  font-size: 20px;
+  font-family: "Quicksand", sans-serif;
+  text-align: right;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
