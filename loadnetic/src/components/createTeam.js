@@ -13,7 +13,7 @@ export default class CreateTeam extends Component {
             teamName: '',
             teamDescription: '',
             teamSize: '1',
-            teamCreatorId: ''
+            teamCreatorId: '42069'
         }
     }
 
@@ -59,8 +59,7 @@ export default class CreateTeam extends Component {
             this.setState({
                 teamName: '',
                 teamDescription: '',
-                teamSize: '',
-                teamCreatorId: ''
+                teamCreatorId: '42069'
             })
         }
     }
