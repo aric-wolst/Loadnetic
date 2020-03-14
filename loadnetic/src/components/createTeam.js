@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class CreateTeam extends Component {
     constructor(props) {
@@ -56,6 +57,16 @@ export default class CreateTeam extends Component {
             console.log(`Size: ${this.state.teamSize}`);
             console.log(`Creator: ${this.state.teamCreatorId}`);
 
+            const newTeam = {
+                teamName: this.state.teamName,
+                teamDescription: this.state.teamDescription,
+                teamSize: this.state.teamSize,
+                teamCreatorId: this.state.teamCreatorId
+            };
+
+            axios.post('http://localhost:4000/loadnetic/add', newTeam)
+                .then(res => console.log(res.data));
+
             this.setState({
                 teamName: '',
                 teamDescription: '',
@@ -90,7 +101,7 @@ export default class CreateTeam extends Component {
                     </div>
                     <div className="form-group">
                         <label>Team Size: </label>
-                        <select value={this.state.size} onChange={this.onChangeTeamSize}>
+                        <select value={this.state.teamSize} onChange={this.onChangeTeamSize}>
                             <option value="1">1</option>
                             <option value="4">4</option>
                             <option value="8">8</option>

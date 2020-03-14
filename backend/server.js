@@ -10,9 +10,9 @@ let Teams = require('./loadnetic.model');
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/todos', loadneticRoutes);
+app.use('/loadnetic', loadneticRoutes);
 
-mongoose.connect('mongodb://127.0.0.1:27017/todos', { useNewUrlParser: true });
+mongoose.connect('mongodb://127.0.0.1:27017/loadnetic', { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 connection.once('open', function() {
