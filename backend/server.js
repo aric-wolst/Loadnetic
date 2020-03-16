@@ -6,7 +6,8 @@ const mongoose = require('mongoose');
 const loadneticRoutes = express.Router();
 const PORT = 4000;
 
-let Teams = require('./loadnetic.model');
+let Teams = require('./teams.model');
+let Users = require('./users.model');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -55,7 +56,9 @@ loadneticRoutes.route('/update/:id').post(function(req, res) {
             team.teamName = req.body.teamName;
             team.teamDescription = req.body.teamDescription;
             team.teamSize = req.body.teamSize;
-            team.teamCreatorId = req.body.teamCreatorId;
+            team.teamAdminId = req.body.teamAdminId;
+            team.teamMemberId = req.body.teamMemberId;
+            team.teamProjects = req.body.teamProjects;
 
             team.save().then(team => {
                 res.json('Team updated!');

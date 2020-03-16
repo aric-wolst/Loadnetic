@@ -14,7 +14,8 @@ export default class CreateTeam extends Component {
             teamName: '',
             teamDescription: '',
             teamSize: '1',
-            teamCreatorId: '42069'
+            teamAdminId: ['42069'],
+            teamMemberId: ['42069']
         }
     }
 
@@ -55,13 +56,15 @@ export default class CreateTeam extends Component {
             console.log(`Name: ${this.state.teamName}`);
             console.log(`Description: ${this.state.teamDescription}`);
             console.log(`Size: ${this.state.teamSize}`);
-            console.log(`Creator: ${this.state.teamCreatorId}`);
+            console.log(`Admin: ${this.state.teamAdminId}`);
+            console.log(`Member: ${this.state.teamMemberId}`);
 
             const newTeam = {
                 teamName: this.state.teamName,
                 teamDescription: this.state.teamDescription,
                 teamSize: this.state.teamSize,
-                teamCreatorId: this.state.teamCreatorId
+                teamAdminId: this.state.teamAdminId,
+                teamMemberId: this.state.teamMemberId
             };
 
             axios.post('http://localhost:4000/loadnetic/add', newTeam)
@@ -70,7 +73,8 @@ export default class CreateTeam extends Component {
             this.setState({
                 teamName: '',
                 teamDescription: '',
-                teamCreatorId: '42069'
+                teamAdminId: ['42069'],
+                teamMemberId: ['42069']
             })
         }
     }
