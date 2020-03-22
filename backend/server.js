@@ -118,6 +118,7 @@ userRoutes.route('/update/:id').post(function(req, res) {
         } else {
             user.name = req.body.name;
             user.username = req.body.username;
+            user.email = req.body.email;
             user.password = req.body.password;
             user.organizations = req.body.organizations;
 
