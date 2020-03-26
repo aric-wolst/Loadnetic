@@ -3,28 +3,40 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const passport = require("passport");
+
+const users = require("./routes/api/users");
 
 /* Routes */
 const loadneticRoutes = express.Router();
-const userRoutes = express.Router();
 const PORT = 4000;
 
 /* Models */
-let Teams = require('./teams.model');
-let Users = require('./users.model');
+let Teams = require('./models/teams.model');
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use('/loadnetic', loadneticRoutes);
-app.use('/users', userRoutes);
+
+const db = require("./config/keys").mongoURI;
 
 /* Connect to mongo */
-mongoose.connect('mongodb://127.0.0.1:27017', { useNewUrlParser: true });
+mongoose.connect(db, { useNewUrlParser: true });
 const connection = mongoose.connection;
 
 connection.once('open', function() {
     console.log("MongoDB database connection established successfully");
 });
+
+// Passport middleware
+app.use(passport.initialize());
+
+// Passport config
+require("./config/passport")(passport);
+
+// Routes
+app.use("/users", users);
 
 /* Get all organizations */
 loadneticRoutes.route('/').get(function(req, res) {
@@ -79,57 +91,56 @@ loadneticRoutes.route('/update/:id').post(function(req, res) {
     });
 });
 
-/* Get all users */
-userRoutes.route('/').get(function(req, res) {
-    Users.find(function(err, users) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.json(users);
-        }
-    });
-});
-
-/* Get user by Id */
-userRoutes.route('/:id').get(function(req, res) {
-    let id = req.params.id;
-    Users.findById(id, function(err, user) {
-        res.json(user);
-    });
-});
-
-/* Add user */
-userRoutes.route('/add').post(function(req, res) {
-    let user = new Users(req.body);
-    user.save()
-        .then(user => {
-            res.status(200).json({'user': 'user added successfully'});
-        })
-        .catch(err => {
-            res.status(400).send('adding new user failed');
-        });
-});
-
-/* Update organization */
-userRoutes.route('/update/:id').post(function(req, res) {
-    Users.findById(req.params.id, function(err, user) {
-        if (!user) {
-            res.status(404).send("data is not found");
-        } else {
-            user.name = req.body.name;
-            user.username = req.body.username;
-            user.email = req.body.email;
-            user.password = req.body.password;
-            user.organizations = req.body.organizations;
-
-            user.save().then(user => {
-                res.json('User updated!');
-            }).catch(err => {
-                res.status(400).send("Update not possible");
-            });
-        }
-    });
-});
+// /* Get all users */
+// userRoutes.route('/').get(function(req, res) {
+//     Users.find(function(err, users) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             res.json(users);
+//         }
+//     });
+// });
+//
+// /* Get user by Id */
+// userRoutes.route('/:id').get(function(req, res) {
+//     let id = req.params.id;
+//     Users.findById(id, function(err, user) {
+//         res.json(user);
+//     });
+// });
+//
+// /* Add user */
+// userRoutes.route('/add').post(function(req, res) {
+//     let user = new Users(req.body);
+//     user.save()
+//         .then(user => {
+//             res.status(200).json({'user': 'user added successfully'});
+//         })
+//         .catch(err => {
+//             res.status(400).send('adding new user failed');
+//         });
+// });
+//
+// /* Update organization */
+// userRoutes.route('/update/:id').post(function(req, res) {
+//     Users.findById(req.params.id, function(err, user) {
+//         if (!user) {
+//             res.status(404).send("data is not found");
+//         } else {
+//             user.name = req.body.name;
+//             user.email = req.body.email;
+//             user.password = req.body.password;
+//             user.organizations = req.body.organizations;
+//
+//             user.save().then(user => {
+//                 res.json('User updated!');
+//             }).catch(err => {
+//                 res.status(400).send("Update not possible");
+//             });
+//         }
+//     });
+// });
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);
