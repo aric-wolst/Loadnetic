@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "loadnetic-install": "npm install --prefix loadnetic",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "loadnetic": "npm start --prefix ../loadnetic",
+    "dev": "concurrently \"npm run server\" \"npm run loadnetic\""
   },
   "keywords": [],
   "author": "",

@@ -38,7 +38,7 @@ require("./config/passport")(passport);
 // Routes
 app.use("/users", users);
 
-/* Get all organizations */
+/* Get all teams */
 loadneticRoutes.route('/').get(function(req, res) {
     Teams.find(function(err, loadnetic) {
         if (err) {
@@ -49,7 +49,7 @@ loadneticRoutes.route('/').get(function(req, res) {
     });
 });
 
-/* Get organization by id */
+/* Get team by id */
 loadneticRoutes.route('/:id').get(function(req, res) {
     let id = req.params.id;
     Teams.findById(id, function(err, loadnetic) {
@@ -57,7 +57,7 @@ loadneticRoutes.route('/:id').get(function(req, res) {
     });
 });
 
-/* Add organization */
+/* Add team */
 loadneticRoutes.route('/add').post(function(req, res) {
     let team = new Teams(req.body);
     team.save()
@@ -69,7 +69,7 @@ loadneticRoutes.route('/add').post(function(req, res) {
         });
 });
 
-/* Update organization */
+/* Update team */
 loadneticRoutes.route('/update/:id').post(function(req, res) {
     Teams.findById(req.params.id, function(err, team) {
         if (!team) {
@@ -122,7 +122,7 @@ loadneticRoutes.route('/update/:id').post(function(req, res) {
 //         });
 // });
 //
-// /* Update organization */
+// /* Update user */
 // userRoutes.route('/update/:id').post(function(req, res) {
 //     Users.findById(req.params.id, function(err, user) {
 //         if (!user) {

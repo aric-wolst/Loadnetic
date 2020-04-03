@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+//Page that creates a team
 export default class CreateTeam extends Component {
+
     constructor(props) {
         super(props);
 
@@ -49,6 +51,8 @@ export default class CreateTeam extends Component {
     };
 
     onSubmit(e) {
+
+        //Stops page from reloading on submit
         e.preventDefault();
 
         if(this.validateForm()) {
@@ -67,7 +71,7 @@ export default class CreateTeam extends Component {
                 teamMemberId: this.state.teamMemberId
             };
 
-            axios.post('http://localhost:4000/loadnetic/add', newTeam)
+            axios.post('/loadnetic/add', newTeam)
                 .then(res => console.log(res.data));
 
             this.setState({
@@ -85,10 +89,9 @@ export default class CreateTeam extends Component {
                 <h3>Create a New Team</h3>
                 <form onSubmit={this.onSubmit} name={"form"}>
                     <div className="form-group">
-                        <label>Name: </label>
+                        <label>Team Name: </label>
                         <input  name = "name"
                                 type="text"
-                                className="form-control"
                                 value={this.state.teamName}
                                 onChange={this.onChangeTeamName}
                         />
@@ -98,7 +101,6 @@ export default class CreateTeam extends Component {
                         <input
                             name = "desc"
                             type="text"
-                            className="form-control"
                             value={this.state.teamDescription}
                             onChange={this.onChangeTeamDescription}
                         />

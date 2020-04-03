@@ -14,7 +14,7 @@ let Users = new Schema({
         type: String,
         required: true
     },
-    organizations: {
+    teams: {
         type: [String],
         required: false
     }
