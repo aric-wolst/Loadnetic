@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import setAuthToken from "./utils/setAuthToken";
+import { setCurrentUser, logoutUser } from "./actions/authActions";
 
 import { Provider } from "react-redux";
 import store from "./store";
@@ -13,6 +16,30 @@ import CreateTeam from "./components/createTeam";
 import "./App.css";
 import Register from "./components/register";
 import Login from "./components/login";
+import PrivateRoute from "./private-route/PrivateRoute";
+
+// Check for token to keep user logged in
+if (localStorage.jwtToken) {
+
+    // Set auth token header auth
+    const token = localStorage.jwtToken;
+    setAuthToken(token);
+
+    // Decode token and get user info and exp
+    const decoded = jwt_decode(token);
+
+    // Set user and isAuthenticated
+    store.dispatch(setCurrentUser(decoded));
+
+    // Check for expired token
+    const currentTime = Date.now() / 1000; // to get in milliseconds
+    if (decoded.exp < currentTime) {
+        // Logout user
+        store.dispatch(logoutUser());
+        // Redirect to login
+        window.location.href = "./login";
+    }
+}
 
 
 class App extends Component {
@@ -27,16 +54,18 @@ class App extends Component {
                                     Loadnetic
                                 </Link>
                             </div>
-                            <Link to="/profile/:id" className="col" id="nameCol">
-                                First Last
+                            <Link to="/login" className="col" id="nameCol">
+                                Login
                             </Link>
                         </div>
                     </div>
                     <Route path="/" exact component={Landing} />
-                    <Route path="/teams/:id" component={Teams} />
-                    <Route path="/createTeam/:id" component={CreateTeam} />
-                    <Route path="/projects/:team" component={Projects} />
-                    <Route path="/profile/:id" component={Profile} />
+                    <Switch>
+                        <PrivateRoute exact path="/teams/:id" component={Teams}/>
+                        <PrivateRoute exact path="/createTeam/:id" component={CreateTeam} />
+                        <PrivateRoute exact path="/projects/:team" component={Projects} />
+                        <PrivateRoute exact path="/profile/:id" component={Profile} />
+                    </Switch>
                     <Route path="/login" component={Login} />
                     <Route path="/register" component={Register} />
                 </Router>

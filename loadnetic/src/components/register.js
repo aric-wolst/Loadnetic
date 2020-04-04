@@ -1,7 +1,11 @@
-import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import React, { Component } from "react";
+import { Link, withRouter } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { registerUser } from "../actions/authActions";
+import classnames from "classnames";
 
-export default class Register extends Component {
+class Register extends Component {
 
     constructor() {
         super();
@@ -12,6 +16,21 @@ export default class Register extends Component {
             password2: "",
             errors: {}
         };
+    }
+
+    componentDidMount() {
+        // If logged in and user navigates to Register page, should redirect them to dashboard
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push("/teams/:id");
+        }
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        }
     }
 
     onChange = e => {
@@ -31,6 +50,8 @@ export default class Register extends Component {
         };
 
         console.log(newUser);
+
+        this.props.registerUser(newUser, this.props.history);
     };
 
     render() {
@@ -45,8 +66,12 @@ export default class Register extends Component {
                             error={this.state.errors.name}
                             id="name"
                             type="text"
+                            className={classnames("", {
+                                invalid: this.state.errors.name
+                            })}
                         />
                         <label htmlFor="name">Name</label>
+                        <span className="red-text">{this.state.errors.name}</span>
                     </div>
                     <div className="form-group">
                         <input
@@ -55,8 +80,12 @@ export default class Register extends Component {
                             error={this.state.errors.email}
                             id="email"
                             type="email"
+                            className={classnames("", {
+                                invalid: this.state.errors.email
+                            })}
                         />
                         <label htmlFor="email">Email</label>
+                        <span className="red-text">{this.state.errors.email}</span>
                     </div>
                     <div className="form-group">
                         <input
@@ -65,8 +94,12 @@ export default class Register extends Component {
                             error={this.state.errors.password}
                             id="password"
                             type="password"
+                            className={classnames("", {
+                                invalid: this.state.errors.password
+                            })}
                         />
                         <label htmlFor="password">Password</label>
+                        <span className="red-text">{this.state.errors.password}</span>
                     </div>
                     <div className="form-group">
                         <input
@@ -75,8 +108,12 @@ export default class Register extends Component {
                             error={this.state.errors.password2}
                             id="password2"
                             type="password"
+                            className={classnames("", {
+                                invalid: this.state.errors.password2
+                            })}
                         />
                         <label htmlFor="password2">Confirm Password</label>
+                        <span className="red-text">{this.state.errors.password2}</span>
                     </div>
                     <div className="form-group">
                         <input type="submit" value="Register" className="btn btn-primary" />
@@ -89,3 +126,19 @@ export default class Register extends Component {
         )
     }
 }
+
+Register.propTypes = {
+    registerUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+
+export default connect(
+    mapStateToProps,
+    { registerUser }
+)(withRouter(Register));
