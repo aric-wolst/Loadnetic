@@ -17,6 +17,7 @@ import "./App.css";
 import Register from "./components/register";
 import Login from "./components/login";
 import PrivateRoute from "./private-route/PrivateRoute";
+import PrivateLink from "./private-route/PrivateLink";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -54,9 +55,7 @@ class App extends Component {
                                     Loadnetic
                                 </Link>
                             </div>
-                            <Link to="/login" className="col" id="nameCol">
-                                Login
-                            </Link>
+                            <PrivateLink/>
                         </div>
                     </div>
                     <Route path="/" exact component={Landing} />

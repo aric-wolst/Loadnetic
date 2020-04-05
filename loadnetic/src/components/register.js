@@ -21,7 +21,10 @@ class Register extends Component {
     componentDidMount() {
         // If logged in and user navigates to Register page, should redirect them to dashboard
         if (this.props.auth.isAuthenticated) {
-            this.props.history.push("/teams/:id");
+            let teams = "/teams/";
+            let id = this.props.auth.user.id.toString();
+            let teamsPath = teams.concat(id);
+            this.props.history.push(teamsPath);
         }
     }
 

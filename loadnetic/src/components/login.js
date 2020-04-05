@@ -17,15 +17,21 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        // If logged in and user navigates to Login page, should redirect them to dashboard
+        // If logged in and user navigates to Login page, should redirect them to their teams
         if (this.props.auth.isAuthenticated) {
-            this.props.history.push("/teams/:id");
+            let teams = "/teams/";
+            let id = this.props.auth.user.id.toString();
+            let teamsPath = teams.concat(id);
+            this.props.history.push(teamsPath);
         }
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
         if (nextProps.auth.isAuthenticated) {
-            this.props.history.push("/teams/:id");
+            let teams = "/teams/";
+            let id = nextProps.auth.user.id.toString();
+            let teamsPath = teams.concat(id);
+            this.props.history.push(teamsPath);
         }
 
         if (nextProps.errors) {
@@ -83,7 +89,7 @@ class Login extends Component {
                             error={this.state.errors.password}
                             id="password"
                             type="password"
-                            className={classnames("", {
+                            className={classnames(" ", {
                                 invalid: this.state.errors.password || this.state.errors.passwordincorrect
                             })}
                         />
