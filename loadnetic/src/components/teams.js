@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "../actions/authActions";
 import {Link} from "react-router-dom";
 
 class Teams extends Component {
+
     componentDidMount() {
         const { match: { params } } = this.props;
         const { user } = this.props.auth;
@@ -34,7 +34,6 @@ class Teams extends Component {
 }
 
 Teams.propTypes = {
-    logoutUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 };
 
@@ -44,5 +43,4 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { logoutUser }
 )(Teams);

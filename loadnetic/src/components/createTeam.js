@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
 
 //Page that creates a team
-export default class CreateTeam extends Component {
+ class CreateTeam extends Component {
 
     constructor(props) {
         super(props);
@@ -20,6 +22,20 @@ export default class CreateTeam extends Component {
             teamMemberId: ['']
         }
     }
+
+     componentDidMount() {
+         const { match: { params } } = this.props;
+         const { user } = this.props.auth;
+
+         if (user.id !== params.id) {
+             this.props.history.push("/login");
+         } else {
+             this.setState({
+                 teamAdminId: [user.id],
+                 teamMemberId: [user.id]
+             });
+         }
+     }
 
     onChangeTeamName(name) {
         this.setState({
@@ -77,8 +93,7 @@ export default class CreateTeam extends Component {
             this.setState({
                 teamName: '',
                 teamDescription: '',
-                teamAdminId: ['42069'],
-                teamMemberId: ['42069']
+                teamSize: '1'
             })
         }
     }
@@ -123,3 +138,15 @@ export default class CreateTeam extends Component {
         )
     }
 }
+
+CreateTeam.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(
+    mapStateToProps,
+)(CreateTeam);
