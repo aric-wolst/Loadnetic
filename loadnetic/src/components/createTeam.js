@@ -16,8 +16,8 @@ export default class CreateTeam extends Component {
             teamName: '',
             teamDescription: '',
             teamSize: '1',
-            teamAdminId: ['42069'],
-            teamMemberId: ['42069']
+            teamAdminId: [''],
+            teamMemberId: ['']
         }
     }
 
