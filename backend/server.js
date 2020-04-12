@@ -91,57 +91,6 @@ loadneticRoutes.route('/update/:id').post(function(req, res) {
     });
 });
 
-// /* Get all users */
-// userRoutes.route('/').get(function(req, res) {
-//     Users.find(function(err, users) {
-//         if (err) {
-//             console.log(err);
-//         } else {
-//             res.json(users);
-//         }
-//     });
-// });
-//
-// /* Get user by Id */
-// userRoutes.route('/:id').get(function(req, res) {
-//     let id = req.params.id;
-//     Users.findById(id, function(err, user) {
-//         res.json(user);
-//     });
-// });
-//
-// /* Add user */
-// userRoutes.route('/add').post(function(req, res) {
-//     let user = new Users(req.body);
-//     user.save()
-//         .then(user => {
-//             res.status(200).json({'user': 'user added successfully'});
-//         })
-//         .catch(err => {
-//             res.status(400).send('adding new user failed');
-//         });
-// });
-//
-// /* Update user */
-// userRoutes.route('/update/:id').post(function(req, res) {
-//     Users.findById(req.params.id, function(err, user) {
-//         if (!user) {
-//             res.status(404).send("data is not found");
-//         } else {
-//             user.name = req.body.name;
-//             user.email = req.body.email;
-//             user.password = req.body.password;
-//             user.organizations = req.body.organizations;
-//
-//             user.save().then(user => {
-//                 res.json('User updated!');
-//             }).catch(err => {
-//                 res.status(400).send("Update not possible");
-//             });
-//         }
-//     });
-// });
-
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);
 });

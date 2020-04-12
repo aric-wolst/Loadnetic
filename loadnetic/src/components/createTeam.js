@@ -72,12 +72,6 @@ import {connect} from "react-redux";
         e.preventDefault();
 
         if(this.validateForm()) {
-            console.log(`Team Created:`);
-            console.log(`Name: ${this.state.teamName}`);
-            console.log(`Description: ${this.state.teamDescription}`);
-            console.log(`Size: ${this.state.teamSize}`);
-            console.log(`Admin: ${this.state.teamAdminId}`);
-            console.log(`Member: ${this.state.teamMemberId}`);
 
             const newTeam = {
                 teamName: this.state.teamName,
@@ -87,7 +81,7 @@ import {connect} from "react-redux";
                 teamMemberId: this.state.teamMemberId
             };
 
-            axios.post('/loadnetic/add', newTeam)
+            axios.post('http://localhost:4000/loadnetic/add', newTeam)
                 .then(res => console.log(res.data));
 
             this.setState({

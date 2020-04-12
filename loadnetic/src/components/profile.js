@@ -26,11 +26,17 @@ class Profile extends Component {
         let teams = "/teams/";
         teams = teams.concat(user.id.toString());
 
+        let update = "/profile/";
+        update = update.concat(user.id.toString(),"/update");
+
         return (
             <div>
                 <p>{user.name}</p>
                 <Link to={teams}>
                     My Teams
+                </Link>
+                <Link to={update}>
+                    Update Profile
                 </Link>
                 <button onClick={this.onLogoutClick} className="btn btn-primary">
                     Logout
