@@ -48,6 +48,12 @@ export const updateCurrentUser = (userData, postRoute) => dispatch => {
 
     axios.post(postRoute, userData).then(
         dispatch(setCurrentUser(userData))
+    )
+        .catch(err =>
+        dispatch({
+            type: GET_ERRORS,
+            payload: err.response.data
+        })
     );
 };
 

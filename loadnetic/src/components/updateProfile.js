@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {postRoute, updateCurrentUser} from "../actions/authActions";
+import {updateCurrentUser, logoutUser} from "../actions/authActions";
+import {Link} from "react-router-dom";
+import classnames from "classnames";
+const isEmpty = require("is-empty");
 
 class updateProfile extends Component {
 
@@ -13,7 +16,8 @@ class updateProfile extends Component {
 
         this.state = {
             name: '',
-            email: ''
+            email: '',
+            errors: {}
         }
     }
 
@@ -23,15 +27,11 @@ class updateProfile extends Component {
 
         if (user.id !== params.id) {
             this.props.history.push("/login");
-        }
-    }
-
-    componentWillReceiveProps(nextProps, nextContext) {
-        if (nextProps.auth.isAuthenticated) {
-            let teams = "/profile/";
-            let id = nextProps.auth.user.id.toString();
-            let teamsPath = teams.concat(id);
-            this.props.history.push(teamsPath);
+        } else {
+            this.setState({
+                email: user.email,
+                name: user.name
+            });
         }
     }
 
@@ -40,6 +40,16 @@ class updateProfile extends Component {
             [e.target.id]: e.target.value
         })
     }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (!isEmpty(nextProps.errors)) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        } else {
+            this.props.logoutUser()
+        }
+    };
 
     onSubmit(e) {
 
@@ -58,10 +68,14 @@ class updateProfile extends Component {
         postRoute = postRoute.concat(user.id.toString());
 
         this.props.updateCurrentUser(user, postRoute);
+
     }
 
     render() {
         const { user } = this.props.auth;
+
+        let cancel = "/profile/";
+        cancel = cancel.concat(user.id.toString());
 
         return (
             <div>
@@ -72,23 +86,40 @@ class updateProfile extends Component {
                         <input  name = "name"
                                 id = "name"
                                 type="text"
+                                error={this.state.errors.name}
                                 value={this.state.name}
                                 onChange={this.onChange}
+                                className={classnames("", {
+                                    invalid: this.state.errors.name
+                                })}
                         />
+                        <span className="red-text">
+                            {this.state.errors.name}
+                        </span>
                     </div>
                     <div className="form-group">
                         <label>Email: </label>
                         <input  name = "email"
                                 id = "email"
                                 type="text"
+                                error={this.state.errors.email}
                                 value={this.state.email}
                                 onChange={this.onChange}
+                                className={classnames("", {
+                                    invalid: this.state.errors.email
+                                })}
                         />
+                        <span className="red-text">
+                            {this.state.errors.email}
+                        </span>
                     </div>
                     <div className="form-group">
                         <input type="submit" value="Update" className="btn btn-primary" />
                     </div>
                 </form>
+                <Link to={cancel}>
+                    Cancel
+                </Link>
             </div>
         )
     }
@@ -96,14 +127,17 @@ class updateProfile extends Component {
 
 updateProfile.propTypes = {
     updateCurrentUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    logoutUser: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    errors: state.errors
 });
 
 export default connect(
     mapStateToProps,
-    { updateCurrentUser }
+    { updateCurrentUser, logoutUser }
 )(updateProfile);

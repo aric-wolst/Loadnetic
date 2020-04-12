@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../actions/authActions";
 import classnames from "classnames";
+const isEmpty = require("is-empty");
 
 class Login extends Component {
 
@@ -68,12 +69,12 @@ class Login extends Component {
                         <input
                             onChange={this.onChange}
                             value={this.state.email}
-                            error={this.state.errors.password}
+                            error={this.state.errors.email}
                             id="email"
                             type="email"
                             className={classnames("", {
-                                invalid: this.state.errors.email || this.state.errors.emailnotfound
-                            })}
+                            invalid: this.state.errors.email || this.state.errors.emailnotfound
+                        })}
                         />
                         <label htmlFor="email">Email</label>
                         <span className="red-text">
