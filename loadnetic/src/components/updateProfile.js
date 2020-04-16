@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {updateCurrentUser, logoutUser} from "../actions/authActions";
 import {Link} from "react-router-dom";
 import classnames from "classnames";
-const isEmpty = require("is-empty");
+const Validator = require("validator");
 
 class updateProfile extends Component {
 
@@ -23,33 +23,62 @@ class updateProfile extends Component {
 
     componentDidMount() {
         const { match: { params } } = this.props;
-        const { user } = this.props.auth;
 
-        if (user.id !== params.id) {
+        if (this.props.auth.user.id !== params.id) {
             this.props.history.push("/login");
         } else {
             this.setState({
-                email: user.email,
-                name: user.name
+                email: this.props.auth.user.email,
+                name: this.props.auth.user.name
             });
         }
     }
 
-    onChange(e) {
-        this.setState({
-            [e.target.id]: e.target.value
-        })
-    }
-
     componentWillReceiveProps(nextProps, nextContext) {
-        if (!isEmpty(nextProps.errors)) {
+        if (nextProps.errors.email) {
+            console.log(nextProps.errors.email);
             this.setState({
                 errors: nextProps.errors
             });
         } else {
-            this.props.logoutUser()
+            this.props.logoutUser();
         }
     };
+
+    onChange(e) {
+        this.setState({
+            [e.target.id]: e.target.value.trim()
+        })
+    }
+
+    validate() {
+        let isValid = true;
+        let error = {};
+
+        if(!Validator.isEmail(this.state.email)){
+            error.email =  "Email is invalid";
+
+            isValid = false;
+        }
+
+        if(Validator.isEmpty(this.state.name)){
+            error.name =  "Name field is required";
+
+            isValid = false;
+        }
+
+        if(Validator.isEmpty(this.state.email)){
+            error.email =  "Email field is required";
+
+            isValid = false;
+        }
+
+        this.setState({
+            errors: error
+        });
+
+        return isValid;
+    }
 
     onSubmit(e) {
 
@@ -67,7 +96,9 @@ class updateProfile extends Component {
         let postRoute = 'http://localhost:4000/users/update/';
         postRoute = postRoute.concat(user.id.toString());
 
-        this.props.updateCurrentUser(user, postRoute);
+        if(this.validate()) {
+            this.props.updateCurrentUser(user, postRoute);
+        }
 
     }
 
@@ -79,7 +110,7 @@ class updateProfile extends Component {
 
         return (
             <div>
-                <p> Update {user.name}'s Profile </p>
+                <h3> Update {user.name}'s Profile </h3>
                 <form onSubmit={this.onSubmit} name={"form"}>
                     <div className="form-group">
                         <label>Name: </label>

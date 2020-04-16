@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../actions/authActions";
 import classnames from "classnames";
-const isEmpty = require("is-empty");
 
 class Login extends Component {
 
@@ -28,6 +27,7 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
+
         if (nextProps.auth.isAuthenticated) {
             let teams = "/teams/";
             let id = nextProps.auth.user.id.toString();

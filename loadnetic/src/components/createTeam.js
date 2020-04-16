@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
+import {Link} from "react-router-dom";
 
 //Page that creates a team
  class CreateTeam extends Component {
@@ -25,14 +26,13 @@ import {connect} from "react-redux";
 
      componentDidMount() {
          const { match: { params } } = this.props;
-         const { user } = this.props.auth;
 
-         if (user.id !== params.id) {
+         if (this.props.auth.user.id !== params.id) {
              this.props.history.push("/login");
          } else {
              this.setState({
-                 teamAdminId: [user.id],
-                 teamMemberId: [user.id]
+                 teamAdminId: [this.props.auth.user.id],
+                 teamMemberId: [this.props.auth.user.id]
              });
          }
      }
@@ -81,8 +81,12 @@ import {connect} from "react-redux";
                 teamMemberId: this.state.teamMemberId
             };
 
-            axios.post('http://localhost:4000/loadnetic/add', newTeam)
-                .then(res => console.log(res.data));
+            let route = "http://localhost:4000/users/addTeam/";
+            route = route.concat(this.props.auth.user.id.toString());
+
+            axios.post("http://localhost:4000/loadnetic/add", newTeam).then( res =>
+                axios.post(route,res.data)
+            );
 
             this.setState({
                 teamName: '',
@@ -93,6 +97,9 @@ import {connect} from "react-redux";
     }
 
     render() {
+        let cancel = "/teams/";
+        cancel = cancel.concat(this.props.auth.user.id.toString());
+
         return (
             <div>
                 <h3>Create a New Team</h3>
@@ -128,6 +135,9 @@ import {connect} from "react-redux";
                         <input type="submit" value="Create Team" className="btn btn-primary" />
                     </div>
                 </form>
+                <Link to={cancel}>
+                    Cancel
+                </Link>
             </div>
         )
     }

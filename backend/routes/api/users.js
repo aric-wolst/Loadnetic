@@ -41,7 +41,7 @@ userRoutes.post("/register", (req, res) => {
                     newUser
                         .save()
                         .then(user => res.json(user))
-                        .catch(err => console.log(err));
+                        .catch(err => res.json("Unable to register!"));
                 });
             });
         }
@@ -145,7 +145,7 @@ userRoutes.route('/update/:id').post(function(req, res) {
 
     User.findOne({ email: req.body.email }).then(dupUser => {
         if((dupUser) && (dupUser.id !== req.params.id)){
-            return res.status(400).json({ email: "Email already in use" });
+            return res.status(400).json({ email: "Update failed: New email already in use" });
         } else {
             User.findById(req.params.id, function(err, user) {
                 if (!user) {
@@ -155,12 +155,28 @@ userRoutes.route('/update/:id').post(function(req, res) {
                     user.name = req.body.name;
 
                     user.save().then(user => {
-                        res.json('Name and email updated!');
+                        res.status(200).json('Name and email updated!');
                     }).catch(err => {
                         res.status(400).send("Update not possible");
                     });
                 }
             })
+        }
+    });
+});
+
+userRoutes.route('/addTeam/:id').post(function(req, res) {
+    User.findById(req.params.id, function(err, user) {
+        if(!user){
+            res.status(404).send("Current user not found");
+        } else {
+            user.teams.push(req.body.teamId);
+
+            user.save().then(user => {
+                res.json('Name and email updated!');
+            }).catch(err => {
+                res.status(400).send("Update not possible");
+            });
         }
     });
 });

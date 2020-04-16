@@ -9,11 +9,11 @@ module.exports = function validateEmail(user) {
     user.name = !isEmpty(user.name) ?  user.name : "";
 
     // Email checks
-    if (Validator.isEmpty( user.email)) {
+    if (Validator.isEmpty(user.email)) {
         errors.email = "Email field is required";
-    } else if (!Validator.isEmail( user.email)) {
+    } else if (!Validator.isEmail(user.email)) {
         errors.email = "Email is invalid";
-    } else if (Validator.isEmpty( user.name)) {
+    } else if (Validator.isEmpty(user.name)) {
         errors.name = "Name field is required";
     }
 

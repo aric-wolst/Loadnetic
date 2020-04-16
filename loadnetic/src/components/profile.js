@@ -8,9 +8,8 @@ class Profile extends Component {
 
     componentDidMount() {
         const { match: { params } } = this.props;
-        const { user } = this.props.auth;
 
-        if (user.id !== params.id) {
+        if (this.props.auth.user.id !== params.id) {
             this.props.history.push("/login");
         }
     }
