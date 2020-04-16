@@ -3,6 +3,8 @@ import axios from 'axios';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
+import classnames from "classnames";
+const Validator = require("validator");
 
 //Page that creates a team
  class CreateTeam extends Component {
@@ -20,7 +22,8 @@ import {Link} from "react-router-dom";
             teamDescription: '',
             teamSize: '1',
             teamAdminId: [''],
-            teamMemberId: ['']
+            teamMemberId: [''],
+            errors: {}
         }
     }
 
@@ -56,14 +59,20 @@ import {Link} from "react-router-dom";
     }
 
     validateForm(){
-        let name = document.forms["form"]["name"].value;
+        let isValid = true;
+        let error = {};
 
-        if(name === ""){
-            alert("Name must be filled in");
-            return false;
-        } else {
-            return true;
+        if(Validator.isEmpty(this.state.teamName)){
+            error.teamName =  "Name field is required";
+
+            isValid = false;
         }
+
+        this.setState({
+            errors: error
+        });
+
+        return isValid;
     };
 
     onSubmit(e) {
@@ -81,12 +90,25 @@ import {Link} from "react-router-dom";
                 teamMemberId: this.state.teamMemberId
             };
 
-            let route = "http://localhost:4000/users/addTeam/";
-            route = route.concat(this.props.auth.user.id.toString());
-
-            axios.post("http://localhost:4000/loadnetic/add", newTeam).then( res =>
-                axios.post(route,res.data)
-            );
+            axios.post("http://localhost:4000/loadnetic/add", newTeam)
+                .then(res => {
+                    let route = "http://localhost:4000/users/addTeam/";
+                    route = route.concat(this.props.auth.user.id.toString());
+                    axios.post(route, res.data)
+                        .catch(err => {
+                            const error = {};
+                            error.user = err;
+                            this.setState({
+                                errors: error
+                            });
+                        });
+                }).catch(err => {
+                    const error = {};
+                    error.team = err;
+                    this.setState({
+                        errors: error
+                    });
+                });
 
             this.setState({
                 teamName: '',
@@ -109,8 +131,15 @@ import {Link} from "react-router-dom";
                         <input  name = "name"
                                 type="text"
                                 value={this.state.teamName}
+                                error={this.state.errors.teamName}
                                 onChange={this.onChangeTeamName}
+                                className={classnames("", {
+                                    invalid: this.state.errors.teamName
+                                })}
                         />
+                        <span className="red-text">
+                            {this.state.errors.teamName}
+                        </span>
                     </div>
                     <div className="form-group">
                         <label>Description: </label>
@@ -135,6 +164,12 @@ import {Link} from "react-router-dom";
                         <input type="submit" value="Create Team" className="btn btn-primary" />
                     </div>
                 </form>
+                <span className="red-text">
+                    {this.state.errors.user}
+                </span>
+                <span className="red-text">
+                    {this.state.errors.team}
+                </span>
                 <Link to={cancel}>
                     Cancel
                 </Link>

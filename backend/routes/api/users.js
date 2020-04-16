@@ -165,6 +165,9 @@ userRoutes.route('/update/:id').post(function(req, res) {
     });
 });
 
+// @route POST /users/addTeam/:id
+// @desc Adds a team id to the user's list of teams
+// @access Public
 userRoutes.route('/addTeam/:id').post(function(req, res) {
     User.findById(req.params.id, function(err, user) {
         if(!user){
