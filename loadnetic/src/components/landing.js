@@ -4,7 +4,9 @@ export default class Landing extends Component {
     render() {
         return (
             <div>
-                <p>Welcome to Loadnetic!</p>
+                <div class="container">
+                    <h3>Welcome to Loadnetic!</h3>
+                </div>
             </div>
         )
     }

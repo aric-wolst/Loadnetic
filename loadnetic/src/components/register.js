@@ -58,71 +58,73 @@ class Register extends Component {
     render() {
         return (
             <div>
-                <h3>Register</h3>
-                <form noValidate onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                        <input
-                            onChange={this.onChange}
-                            value={this.state.name}
-                            error={this.state.errors.name}
-                            id="name"
-                            type="text"
-                            className={classnames("", {
-                                invalid: this.state.errors.name
-                            })}
-                        />
-                        <label htmlFor="name">Name</label>
-                        <span className="red-text">{this.state.errors.name}</span>
-                    </div>
-                    <div className="form-group">
-                        <input
-                            onChange={this.onChange}
-                            value={this.state.email}
-                            error={this.state.errors.email}
-                            id="email"
-                            type="email"
-                            className={classnames("", {
-                                invalid: this.state.errors.email
-                            })}
-                        />
-                        <label htmlFor="email">Email</label>
-                        <span className="red-text">{this.state.errors.email}</span>
-                    </div>
-                    <div className="form-group">
-                        <input
-                            onChange={this.onChange}
-                            value={this.state.password}
-                            error={this.state.errors.password}
-                            id="password"
-                            type="password"
-                            className={classnames("", {
-                                invalid: this.state.errors.password
-                            })}
-                        />
-                        <label htmlFor="password">Password</label>
-                        <span className="red-text">{this.state.errors.password}</span>
-                    </div>
-                    <div className="form-group">
-                        <input
-                            onChange={this.onChange}
-                            value={this.state.password2}
-                            error={this.state.errors.password2}
-                            id="password2"
-                            type="password"
-                            className={classnames("", {
-                                invalid: this.state.errors.password2
-                            })}
-                        />
-                        <label htmlFor="password2">Confirm Password</label>
-                        <span className="red-text">{this.state.errors.password2}</span>
-                    </div>
-                    <div className="form-group">
-                        <input type="submit" value="Register" className="btn btn-primary" />
-                    </div>
-                </form>
-                <p>
-                    Already have an account? <Link to="/login">Log in</Link>
-                </p>
+                <div class="container">
+                    <h3>Register</h3>
+                    <form noValidate onSubmit={this.onSubmit}>
+                        <div className="form-group">
+                            <input
+                                onChange={this.onChange}
+                                value={this.state.name}
+                                error={this.state.errors.name}
+                                id="name"
+                                type="text"
+                                className={classnames("", {
+                                    invalid: this.state.errors.name
+                                })}
+                            />
+                            <label htmlFor="name">Name</label>
+                            <span className="red-text">{this.state.errors.name}</span>
+                        </div>
+                        <div className="form-group">
+                            <input
+                                onChange={this.onChange}
+                                value={this.state.email}
+                                error={this.state.errors.email}
+                                id="email"
+                                type="email"
+                                className={classnames("", {
+                                    invalid: this.state.errors.email
+                                })}
+                            />
+                            <label htmlFor="email">Email</label>
+                            <span className="red-text">{this.state.errors.email}</span>
+                        </div>
+                        <div className="form-group">
+                            <input
+                                onChange={this.onChange}
+                                value={this.state.password}
+                                error={this.state.errors.password}
+                                id="password"
+                                type="password"
+                                className={classnames("", {
+                                    invalid: this.state.errors.password
+                                })}
+                            />
+                            <label htmlFor="password">Password</label>
+                            <span className="red-text">{this.state.errors.password}</span>
+                        </div>
+                        <div className="form-group">
+                            <input
+                                onChange={this.onChange}
+                                value={this.state.password2}
+                                error={this.state.errors.password2}
+                                id="password2"
+                                type="password"
+                                className={classnames("", {
+                                    invalid: this.state.errors.password2
+                                })}
+                            />
+                            <label htmlFor="password2">Confirm Password</label>
+                            <span className="red-text">{this.state.errors.password2}</span>
+                        </div>
+                        <div className="form-group">
+                            <input type="submit" value="Register" className="btn btn-primary" />
+                        </div>
+                    </form>
+                    <p>
+                        Already have an account? <Link to="/login">Log in</Link>
+                    </p>
+                </div>
             </div>
         )
     }

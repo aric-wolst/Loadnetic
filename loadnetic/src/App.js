@@ -4,12 +4,11 @@ import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from "react-redux";
 import store from "./store";
 
 import Landing from "./components/landing.js";
-import Projects from "./components/projects.js";
 import Teams from "./components/teams.js";
 import Profile from "./components/profile.js";
 import CreateTeam from "./components/createTeam";
@@ -18,7 +17,9 @@ import Register from "./components/register";
 import Login from "./components/login";
 import PrivateRoute from "./private-route/PrivateRoute";
 import PrivateLink from "./private-route/PrivateLink";
+import PrivateTeamsLink from "./private-route/PrivateTeamsLink";
 import updateProfile from "./components/updateProfile";
+import TeamProfile from "./components/teamProfile";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -56,6 +57,7 @@ class App extends Component {
                                     Loadnetic
                                 </Link>
                             </div>
+                            <PrivateTeamsLink/>
                             <PrivateLink/>
                         </div>
                     </div>
@@ -63,7 +65,7 @@ class App extends Component {
                     <Switch>
                         <PrivateRoute exact path="/teams/:id" component={Teams}/>
                         <PrivateRoute exact path="/createTeam/:id" component={CreateTeam} />
-                        <PrivateRoute exact path="/projects/:team" component={Projects} />
+                        <PrivateRoute exact path="/teamProfile/:teamId" component={TeamProfile} />
                         <PrivateRoute exact path="/profile/:id" component={Profile} />
                         <PrivateRoute exact path="/profile/:id/update" component={updateProfile} />
                     </Switch>

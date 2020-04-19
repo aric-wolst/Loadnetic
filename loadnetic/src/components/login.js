@@ -63,49 +63,51 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <h3>Login</h3>
-                <form noValidate onSubmit={this.onSubmit}>
-                    <div className="form-group">
-                        <input
-                            onChange={this.onChange}
-                            value={this.state.email}
-                            error={this.state.errors.email}
-                            id="email"
-                            type="email"
-                            className={classnames("", {
-                            invalid: this.state.errors.email || this.state.errors.emailnotfound
-                        })}
-                        />
-                        <label htmlFor="email">Email</label>
-                        <span className="red-text">
-                            {this.state.errors.email}
-                            {this.state.errors.emailnotfound}
-                        </span>
-                    </div>
-                    <div className="form-group">
-                        <input
-                            onChange={this.onChange}
-                            value={this.state.password}
-                            error={this.state.errors.password}
-                            id="password"
-                            type="password"
-                            className={classnames(" ", {
-                                invalid: this.state.errors.password || this.state.errors.passwordincorrect
+                <div class="container">
+                    <h3>Login</h3>
+                    <form noValidate onSubmit={this.onSubmit}>
+                        <div className="form-group">
+                            <input
+                                onChange={this.onChange}
+                                value={this.state.email}
+                                error={this.state.errors.email}
+                                id="email"
+                                type="email"
+                                className={classnames("", {
+                                invalid: this.state.errors.email || this.state.errors.emailnotfound
                             })}
-                        />
-                        <label htmlFor="password">Password</label>
-                        <span className="red-text">
-                            {this.state.errors.password}
-                            {this.state.errors.passwordincorrect}
-                        </span>
-                    </div>
-                    <div className="form-group">
-                        <input type="submit" value="Login" className="btn btn-primary" />
-                    </div>
-                </form>
-                <p>
-                    Don't have an account? <Link to="/register">Register</Link>
-                </p>
+                            />
+                            <label htmlFor="email">Email</label>
+                            <span className="red-text">
+                                {this.state.errors.email}
+                                {this.state.errors.emailnotfound}
+                            </span>
+                        </div>
+                        <div className="form-group">
+                            <input
+                                onChange={this.onChange}
+                                value={this.state.password}
+                                error={this.state.errors.password}
+                                id="password"
+                                type="password"
+                                className={classnames(" ", {
+                                    invalid: this.state.errors.password || this.state.errors.passwordincorrect
+                                })}
+                            />
+                            <label htmlFor="password">Password</label>
+                            <span className="red-text">
+                                {this.state.errors.password}
+                                {this.state.errors.passwordincorrect}
+                            </span>
+                        </div>
+                        <div className="form-group">
+                            <input type="submit" value="Login" className="btn btn-primary" />
+                        </div>
+                    </form>
+                    <p>
+                        Don't have an account? <Link to="/register">Register</Link>
+                    </p>
+                </div>
             </div>
         )
     }

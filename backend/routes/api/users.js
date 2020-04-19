@@ -10,6 +10,7 @@ const validateEmail = require("../../validation/email");
 
 // Load User model
 const User = require("../../models/users.model");
+const Teams = require("../../models/teams.model");
 
 // @route POST /users/register
 // @desc Registers user
@@ -176,10 +177,35 @@ userRoutes.route('/addTeam/:id').post(function(req, res) {
             user.teams.push(req.body.teamId);
 
             user.save().then(user => {
-                res.json('Name and email updated!');
+                res.status(200).json('Name and email updated!');
             }).catch(err => {
                 res.status(400).send("Update not possible");
             });
+        }
+    });
+});
+
+// @route GET /users/getTeams/:id
+// @desc Returns user with specified id
+// @access Public
+userRoutes.route('/getTeams/:id').get(function(req, res) {
+    let id = req.params.id;
+    User.findById(id, function(err, user) {
+        if(!user){
+            res.status(404).send("Current user not found");
+        } else {
+            var teams = [];
+            var iterator = user.teams.values();
+            let i = 0;
+            for(let elements of iterator){
+                Teams.findById(elements, function(err, team) {
+                    teams.push(team);
+                    i++;
+                    if(i === user.teams.length){
+                        res.status(200).send(teams);
+                    }
+                });
+            }
         }
     });
 });

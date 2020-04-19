@@ -110,47 +110,49 @@ class updateProfile extends Component {
 
         return (
             <div>
-                <h3> Update {user.name}'s Profile </h3>
-                <form onSubmit={this.onSubmit} name={"form"}>
-                    <div className="form-group">
-                        <label>Name: </label>
-                        <input  name = "name"
-                                id = "name"
-                                type="text"
-                                error={this.state.errors.name}
-                                value={this.state.name}
-                                onChange={this.onChange}
-                                className={classnames("", {
-                                    invalid: this.state.errors.name
-                                })}
-                        />
-                        <span className="red-text">
-                            {this.state.errors.name}
-                        </span>
-                    </div>
-                    <div className="form-group">
-                        <label>Email: </label>
-                        <input  name = "email"
-                                id = "email"
-                                type="text"
-                                error={this.state.errors.email}
-                                value={this.state.email}
-                                onChange={this.onChange}
-                                className={classnames("", {
-                                    invalid: this.state.errors.email
-                                })}
-                        />
-                        <span className="red-text">
-                            {this.state.errors.email}
-                        </span>
-                    </div>
-                    <div className="form-group">
-                        <input type="submit" value="Update" className="btn btn-primary" />
-                    </div>
-                </form>
-                <Link to={cancel}>
-                    Cancel
-                </Link>
+                <div class="container">
+                    <h3> Update {user.name}'s Profile </h3>
+                    <form onSubmit={this.onSubmit} name={"form"}>
+                        <div className="form-group">
+                            <label>Name: </label>
+                            <input  name = "name"
+                                    id = "name"
+                                    type="text"
+                                    error={this.state.errors.name}
+                                    value={this.state.name}
+                                    onChange={this.onChange}
+                                    className={classnames("", {
+                                        invalid: this.state.errors.name
+                                    })}
+                            />
+                            <span className="red-text">
+                                {this.state.errors.name}
+                            </span>
+                        </div>
+                        <div className="form-group">
+                            <label>Email: </label>
+                            <input  name = "email"
+                                    id = "email"
+                                    type="text"
+                                    error={this.state.errors.email}
+                                    value={this.state.email}
+                                    onChange={this.onChange}
+                                    className={classnames("", {
+                                        invalid: this.state.errors.email
+                                    })}
+                            />
+                            <span className="red-text">
+                                {this.state.errors.email}
+                            </span>
+                        </div>
+                        <div className="form-group">
+                            <input type="submit" value="Update" className="btn btn-primary" />
+                        </div>
+                    </form>
+                    <Link to={cancel}>
+                        Cancel
+                    </Link>
+                </div>
             </div>
         )
     }

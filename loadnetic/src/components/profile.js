@@ -30,16 +30,25 @@ class Profile extends Component {
 
         return (
             <div>
-                <p>{user.name}</p>
-                <Link to={teams}>
-                    My Teams
-                </Link>
-                <Link to={update}>
-                    Update Profile
-                </Link>
-                <button onClick={this.onLogoutClick} className="btn btn-primary">
-                    Logout
-                </button>
+                <div class="container">
+                    <h3>{user.name}</h3>
+                    <h4>{user.email}</h4>
+                    <div>
+                        <Link to={teams}>
+                            My Teams
+                        </Link>
+                    </div>
+                    <div>
+                        <Link to={update}>
+                            Update Profile
+                        </Link>
+                    </div>
+                    <div>
+                        <button onClick={this.onLogoutClick} className="btn btn-primary">
+                            Logout
+                        </button>
+                    </div>
+                </div>
             </div>
         )
     }

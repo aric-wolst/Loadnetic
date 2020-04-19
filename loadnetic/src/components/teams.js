@@ -2,8 +2,28 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {Link} from "react-router-dom";
+import axios from 'axios';
+
+let createTeam = "/teamProfile/";
+
+const Team = props => (
+    <div class="col-4">
+        <h4> <a href={createTeam.concat(props.team._id)}>{props.team.teamName}</a></h4>
+        <p>{props.team.teamDescription}</p>
+        <p>Team Size: {props.team.teamSize}</p>
+    </div>
+);
 
 class Teams extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            teams: [],
+            errors: {}
+        }
+    }
 
     componentDidMount() {
         const { match: { params } } = this.props;
@@ -11,6 +31,29 @@ class Teams extends Component {
         if (this.props.auth.user.id !== params.id) {
             this.props.history.push("/login");
         }
+
+        let route = "http://localhost:4000/users/getTeams/";
+        route = route.concat(this.props.auth.user.id.toString());
+        axios.get(route)
+            .then(teams => {
+                this.setState({
+                    teams: teams.data
+                });
+            }).catch(err => {
+                const error = {};
+                error.teams = err;
+                this.setState({
+                    errors: error
+                });
+            }
+        );
+    }
+
+    teamsList() {
+        return this.state.teams.map(function(currentTeam, i){
+            console.log(currentTeam);
+            return <Team team={currentTeam} key={i} />;
+        })
     }
 
     render() {
@@ -21,12 +64,15 @@ class Teams extends Component {
 
         return (
             <div>
-                <p>{user.name}'s Teams</p>
-
-                <Link to={createTeam}>
-                    Create a New Team
-                </Link>
-
+                <div class="container">
+                    <h3>{user.name}'s Teams</h3>
+                    <div class="row">
+                        { this.teamsList() }
+                    </div>
+                    <Link to={createTeam}>
+                        Create a New Team
+                    </Link>
+                </div>
             </div>
         )
     }

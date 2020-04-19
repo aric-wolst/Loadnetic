@@ -68,6 +68,12 @@ const Validator = require("validator");
             isValid = false;
         }
 
+        if(Validator.isEmpty(this.state.teamDescription)){
+            error.teamDescription =  "Description field is required";
+
+            isValid = false;
+        }
+
         this.setState({
             errors: error
         });
@@ -95,7 +101,12 @@ const Validator = require("validator");
                     let route = "http://localhost:4000/users/addTeam/";
                     route = route.concat(this.props.auth.user.id.toString());
                     axios.post(route, res.data)
-                        .catch(err => {
+                        .then(res => {
+                            let teams = "/teams/";
+                            let id = this.props.auth.user.id.toString();
+                            let teamsPath = teams.concat(id);
+                            this.props.history.push(teamsPath);
+                        }).catch(err => {
                             const error = {};
                             error.user = err;
                             this.setState({
@@ -124,55 +135,64 @@ const Validator = require("validator");
 
         return (
             <div>
-                <h3>Create a New Team</h3>
-                <form onSubmit={this.onSubmit} name={"form"}>
-                    <div className="form-group">
-                        <label>Team Name: </label>
-                        <input  name = "name"
+                <div class="container">
+                    <h3>Create a New Team</h3>
+                    <form onSubmit={this.onSubmit} name={"form"}>
+                        <div className="form-group">
+                            <label>Team Name: </label>
+                            <input  name = "name"
+                                    type="text"
+                                    value={this.state.teamName}
+                                    error={this.state.errors.teamName}
+                                    onChange={this.onChangeTeamName}
+                                    className={classnames("", {
+                                        invalid: this.state.errors.teamName
+                                    })}
+                            />
+                            <span className="red-text">
+                                {this.state.errors.teamName}
+                            </span>
+                        </div>
+                        <div className="form-group">
+                            <label>Description: </label>
+                            <input
+                                name = "desc"
                                 type="text"
-                                value={this.state.teamName}
-                                error={this.state.errors.teamName}
-                                onChange={this.onChangeTeamName}
+                                value={this.state.teamDescription}
+                                error={this.state.errors.teamDescription}
+                                onChange={this.onChangeTeamDescription}
                                 className={classnames("", {
-                                    invalid: this.state.errors.teamName
+                                    invalid: this.state.errors.teamDescription
                                 })}
-                        />
-                        <span className="red-text">
-                            {this.state.errors.teamName}
-                        </span>
-                    </div>
-                    <div className="form-group">
-                        <label>Description: </label>
-                        <input
-                            name = "desc"
-                            type="text"
-                            value={this.state.teamDescription}
-                            onChange={this.onChangeTeamDescription}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Team Size: </label>
-                        <select value={this.state.teamSize} onChange={this.onChangeTeamSize}>
-                            <option value="1">1</option>
-                            <option value="4">4</option>
-                            <option value="8">8</option>
-                            <option value="12">12</option>
-                            <option value="16">16</option>
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <input type="submit" value="Create Team" className="btn btn-primary" />
-                    </div>
-                </form>
-                <span className="red-text">
-                    {this.state.errors.user}
-                </span>
-                <span className="red-text">
-                    {this.state.errors.team}
-                </span>
-                <Link to={cancel}>
-                    Cancel
-                </Link>
+                            />
+                            <span className="red-text">
+                                {this.state.errors.teamDescription}
+                            </span>
+                        </div>
+                        <div className="form-group">
+                            <label>Team Size: </label>
+                            <select value={this.state.teamSize} onChange={this.onChangeTeamSize}>
+                                <option value="1">1</option>
+                                <option value="4">4</option>
+                                <option value="8">8</option>
+                                <option value="12">12</option>
+                                <option value="16">16</option>
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <input type="submit" value="Create Team" className="btn btn-primary" />
+                        </div>
+                    </form>
+                    <span className="red-text">
+                        {this.state.errors.user}
+                    </span>
+                    <span className="red-text">
+                        {this.state.errors.team}
+                    </span>
+                    <Link to={cancel}>
+                        Cancel
+                    </Link>
+                </div>
             </div>
         )
     }
