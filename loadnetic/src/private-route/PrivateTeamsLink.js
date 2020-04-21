@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 let teams = "/teams/";
 
 const PrivateTeamsLink = ({ component: component, auth, ...rest}) => (
-    <Link className="col" id="nameCol" to={auth.isAuthenticated === true ? (teams.concat(auth.user.id.toString())):("/")}>
+    <Link className="col-2" id="teamCol" to={auth.isAuthenticated === true ? (teams.concat(auth.user.id.toString())):("/")}>
         {auth.isAuthenticated === true ? ("Teams"):("")}
     </Link>
 );

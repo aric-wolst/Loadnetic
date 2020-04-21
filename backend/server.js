@@ -7,6 +7,7 @@ const passport = require("passport");
 
 const users = require("./routes/api/users");
 const loadnetic = require("./routes/api/loadnetic");
+const projects = require("./routes/api/projects");
 
 const PORT = 4000;
 
@@ -33,6 +34,7 @@ require("./config/passport")(passport);
 // Routes
 app.use("/users", users);
 app.use("/loadnetic", loadnetic);
+app.use("/projects", projects);
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);

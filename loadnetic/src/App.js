@@ -52,7 +52,7 @@ class App extends Component {
                 <Router>
                     <div className="top">
                         <div className="row">
-                            <div className="col">
+                            <div className="col-7">
                                 <Link to="/" className="loadnetic">
                                     Loadnetic
                                 </Link>

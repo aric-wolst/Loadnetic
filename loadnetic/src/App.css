@@ -45,3 +45,12 @@ html, body {
   text-align: right;
 }
 
+#teamCol {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: white;
+  font-size: 20px;
+  font-family: "Quicksand", sans-serif;
+  text-align: right;
+}
+

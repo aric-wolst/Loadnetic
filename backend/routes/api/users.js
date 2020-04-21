@@ -3,10 +3,10 @@ const userRoutes = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
+
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
-const validateEmail = require("../../validation/email");
 
 // Load User model
 const User = require("../../models/users.model");
@@ -41,8 +41,8 @@ userRoutes.post("/register", (req, res) => {
                     newUser.password = hash;
                     newUser
                         .save()
-                        .then(user => res.json(user))
-                        .catch(err => res.json("Unable to register!"));
+                        .then(user => res.status(200).json(user))
+                        .catch(err => res.status(400).json("Unable to register!"));
                 });
             });
         }
@@ -93,7 +93,7 @@ userRoutes.post("/login", (req, res) => {
                         expiresIn: 28800 //  8 hours
                     },
                     (err, token) => {
-                        res.json({
+                        res.status(200).json({
                             success: true,
                             token: "Bearer " + token
                         });
@@ -114,9 +114,9 @@ userRoutes.post("/login", (req, res) => {
 userRoutes.route('/').get(function(req, res) {
     User.find(function(err, users) {
         if (err) {
-            console.log(err);
+            res.status(400).json("Cannot find users");
         } else {
-            res.json(users);
+            res.status(200).json(users);
         }
     });
 });
@@ -127,7 +127,11 @@ userRoutes.route('/').get(function(req, res) {
 userRoutes.route('/:id').get(function(req, res) {
     let id = req.params.id;
     User.findById(id, function(err, user) {
-        res.json(user);
+        if (err) {
+            res.status(400).json("Cannot find user");
+        } else {
+            res.status(200).json(user);
+        }
     });
 });
 
@@ -167,21 +171,28 @@ userRoutes.route('/update/:id').post(function(req, res) {
 });
 
 // @route POST /users/addTeam/:id
-// @desc Adds a team id to the user's list of teams
+// @desc Creates a teams and then adds it to the specified user's list of teams
 // @access Public
 userRoutes.route('/addTeam/:id').post(function(req, res) {
-    User.findById(req.params.id, function(err, user) {
-        if(!user){
-            res.status(404).send("Current user not found");
-        } else {
-            user.teams.push(req.body.teamId);
+    let team = new Teams(req.body);
 
-            user.save().then(user => {
-                res.status(200).json('Name and email updated!');
-            }).catch(err => {
-                res.status(400).send("Update not possible");
+    team.save()
+        .then(team => {
+            User.findById(req.params.id, function(err, user) {
+                if(!user){
+                    res.status(404).send("Current user not found");
+                } else {
+                    user.teams.push(team.id);
+
+                    user.save().then(user => {
+                        res.status(200).json('Team created!');
+                    }).catch(err => {
+                        res.status(400).send("Team creation not possible!");
+                    });
+                }
             });
-        }
+    }).catch(err => {
+            res.status(400).send('Adding new team failed');
     });
 });
 
@@ -199,10 +210,14 @@ userRoutes.route('/getTeams/:id').get(function(req, res) {
             let i = 0;
             for(let elements of iterator){
                 Teams.findById(elements, function(err, team) {
-                    teams.push(team);
-                    i++;
-                    if(i === user.teams.length){
-                        res.status(200).send(teams);
+                    if(!team){
+                        res.status(404).send("Team not found");
+                    } else {
+                        teams.push(team);
+                        i++;
+                        if (i === user.teams.length) {
+                            res.status(200).send(teams);
+                        }
                     }
                 });
             }

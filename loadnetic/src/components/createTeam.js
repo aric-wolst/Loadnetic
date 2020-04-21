@@ -96,26 +96,18 @@ const Validator = require("validator");
                 teamMemberId: this.state.teamMemberId
             };
 
-            axios.post("http://localhost:4000/loadnetic/add", newTeam)
+
+            let route = "http://localhost:4000/users/addTeam/";
+            route = route.concat(this.props.auth.user.id.toString());
+            axios.post(route, newTeam)
                 .then(res => {
-                    let route = "http://localhost:4000/users/addTeam/";
-                    route = route.concat(this.props.auth.user.id.toString());
-                    axios.post(route, res.data)
-                        .then(res => {
-                            let teams = "/teams/";
-                            let id = this.props.auth.user.id.toString();
-                            let teamsPath = teams.concat(id);
-                            this.props.history.push(teamsPath);
-                        }).catch(err => {
-                            const error = {};
-                            error.user = err;
-                            this.setState({
-                                errors: error
-                            });
-                        });
+                    let teams = "/teams/";
+                    let id = this.props.auth.user.id.toString();
+                    let teamsPath = teams.concat(id);
+                    this.props.history.push(teamsPath);
                 }).catch(err => {
                     const error = {};
-                    error.team = err;
+                    error.user = err;
                     this.setState({
                         errors: error
                     });
