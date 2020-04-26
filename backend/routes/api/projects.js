@@ -19,6 +19,7 @@ projectRoutes.route('/').get(function(req, res) {
 // @route GET /projects/:id
 // @desc Returns the project with the specified id
 // @access Public
+// @params: id = projectId
 projectRoutes.route('/:id').get(function(req, res) {
     let id = req.params.id;
     Projects.findById(id, function(err, project) {

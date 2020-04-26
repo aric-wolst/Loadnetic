@@ -20,6 +20,7 @@ loadneticRoutes.route('/').get(function(req, res) {
 // @route GET /loadnetic/:id
 // @desc Returns the team with the specified id
 // @access Public
+// @params: id = teamId
 loadneticRoutes.route('/:id').get(function(req, res) {
     let id = req.params.id;
     Teams.findById(id, function(err, loadnetic) {
@@ -34,6 +35,7 @@ loadneticRoutes.route('/:id').get(function(req, res) {
 // @route POST /loadnetic/update/:id
 // @desc Updates the specified team
 // @access Public
+// @params: id = teamId, req = team JSON object
 loadneticRoutes.route('/update/:id').post(function(req, res) {
     Teams.findById(req.params.id, function(err, team) {
         if (!team) {
@@ -54,6 +56,7 @@ loadneticRoutes.route('/update/:id').post(function(req, res) {
 // @route POST /loadnetic/addProject/:id
 // @desc Creates a project and adds it to the specified team's list of projects
 // @access Public
+// @params: id = teamId, req = project JSON object
 loadneticRoutes.route('/addProject/:id').post(function(req, res) {
     let project = new Projects(req.body);
 

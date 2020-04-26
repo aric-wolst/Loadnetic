@@ -47,11 +47,12 @@ class Teams extends Component {
                 });
             }
         );
+
+        console.log(this.props);
     }
 
     teamsList() {
         return this.state.teams.map(function(currentTeam, i){
-            console.log(currentTeam);
             return <Team team={currentTeam} key={i} />;
         })
     }
@@ -70,7 +71,7 @@ class Teams extends Component {
                         { this.teamsList() }
                     </div>
                     <Link to={createTeam}>
-                        Create a New Team
+                        New Team
                     </Link>
                 </div>
             </div>

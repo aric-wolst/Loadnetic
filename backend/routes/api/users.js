@@ -15,6 +15,7 @@ const Teams = require("../../models/teams.model");
 // @route POST /users/register
 // @desc Registers user
 // @access Public
+// @params: req = user JSON object
 userRoutes.post("/register", (req, res) => {
     // Form validation
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -52,11 +53,11 @@ userRoutes.post("/register", (req, res) => {
 // @route POST api/users/login
 // @desc Login user and return JWT token
 // @access Public
+// @params: req = user JSON email and password
 userRoutes.post("/login", (req, res) => {
 
     // Form validation
     const { errors, isValid } = validateLoginInput(req.body);
-
 
     // Check validation
     if (!isValid) {
@@ -124,6 +125,7 @@ userRoutes.route('/').get(function(req, res) {
 // @route GET /users/:id
 // @desc Returns user with specified id
 // @access Public
+// @params: id = userId
 userRoutes.route('/:id').get(function(req, res) {
     let id = req.params.id;
     User.findById(id, function(err, user) {
@@ -136,17 +138,10 @@ userRoutes.route('/:id').get(function(req, res) {
 });
 
 // @route POST /users/update/:id
-// @desc Updates a users email
+// @desc Updates a users email and name
 // @access Public
+// @params: req = user JSON object id = userId
 userRoutes.route('/update/:id').post(function(req, res) {
-
-    // Email validation
-    const { errors, isValid } = validateEmail(req.body);
-
-    // Check validation
-    if (!isValid) {
-        return res.status(400).json(errors);
-    }
 
     User.findOne({ email: req.body.email }).then(dupUser => {
         if((dupUser) && (dupUser.id !== req.params.id)){
@@ -173,6 +168,7 @@ userRoutes.route('/update/:id').post(function(req, res) {
 // @route POST /users/addTeam/:id
 // @desc Creates a teams and then adds it to the specified user's list of teams
 // @access Public
+// @params: req = team JSON object id = userId
 userRoutes.route('/addTeam/:id').post(function(req, res) {
     let team = new Teams(req.body);
 
@@ -197,18 +193,19 @@ userRoutes.route('/addTeam/:id').post(function(req, res) {
 });
 
 // @route GET /users/getTeams/:id
-// @desc Returns user with specified id
+// @desc Returns all of a user's teams as JSON objects
 // @access Public
+// @params: id = userId
 userRoutes.route('/getTeams/:id').get(function(req, res) {
     let id = req.params.id;
     User.findById(id, function(err, user) {
         if(!user){
             res.status(404).send("Current user not found");
         } else {
-            var teams = [];
-            var iterator = user.teams.values();
+            let teams = [];
+            let userTeams = user.teams.values();
             let i = 0;
-            for(let elements of iterator){
+            for(let elements of userTeams){
                 Teams.findById(elements, function(err, team) {
                     if(!team){
                         res.status(404).send("Team not found");
@@ -221,6 +218,31 @@ userRoutes.route('/getTeams/:id').get(function(req, res) {
                     }
                 });
             }
+        }
+    });
+});
+
+// @route GET /users/hasTeam/:id/:teamId
+// @desc Returns true if the user is part of the team
+// @access Public
+// @params: id = userId, teamId = teamId
+userRoutes.route('/hasTeam/:id/:teamId').get(function(req, res){
+    let userId = req.params.id;
+    let teamId = req.params.teamId;
+
+    User.findById(userId, function(err, user) {
+        if(!user){
+            res.status(404).send("Current user not found");
+        } else {
+            let teams = user.teams.values();
+            let hasTeam = false;
+            for(let team of teams){
+                if(team === teamId){
+                    hasTeam = true;
+                    break;
+                }
+            }
+            res.status(200).send(hasTeam);
         }
     });
 });

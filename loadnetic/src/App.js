@@ -20,6 +20,7 @@ import PrivateLink from "./private-route/PrivateLink";
 import PrivateTeamsLink from "./private-route/PrivateTeamsLink";
 import updateProfile from "./components/updateProfile";
 import TeamProfile from "./components/teamProfile";
+import CreateProject from "./components/createProject";
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -66,6 +67,7 @@ class App extends Component {
                         <PrivateRoute exact path="/teams/:id" component={Teams}/>
                         <PrivateRoute exact path="/createTeam/:id" component={CreateTeam} />
                         <PrivateRoute exact path="/teamProfile/:teamId" component={TeamProfile} />
+                        <PrivateRoute exact path="/createProject/:teamId" component={CreateProject} />
                         <PrivateRoute exact path="/profile/:id" component={Profile} />
                         <PrivateRoute exact path="/profile/:id/update" component={updateProfile} />
                     </Switch>
