@@ -14,6 +14,8 @@ loadneticRoutes.route('/').get(function(req, res) {
         } else {
             res.status(200).json(loadnetic);
         }
+    }).catch(err => {
+        res.status(400).send("Error finding current team!");
     });
 });
 
@@ -29,6 +31,8 @@ loadneticRoutes.route('/:id').get(function(req, res) {
         } else {
             res.status(200).json(loadnetic);
         }
+    }).catch(err => {
+        res.status(400).send("Error finding current team!");
     });
 });
 
@@ -50,6 +54,8 @@ loadneticRoutes.route('/update/:id').post(function(req, res) {
                 res.status(400).send("Update not possible");
             });
         }
+    }).catch(err => {
+        res.status(400).send("Error finding current team!");
     });
 });
 
@@ -69,14 +75,50 @@ loadneticRoutes.route('/addProject/:id').post(function(req, res) {
                     team.teamProjects.push(project.id);
 
                     team.save().then(team => {
-                        res.status(200).json('Project created!');
+                        res.status(200).json("Project created!");
                     }).catch(err => {
                         res.status(400).send("Project creation not possible!");
                     });
                 }
+            }).catch(err => {
+                res.status(400).send("Error finding current team!");
             });
         }).catch(err => {
-        res.status(400).send('Adding new project failed');
+            res.status(400).send("Adding new project failed");
+    });
+});
+
+// @route GET /loadnetic/getProjects/:teamId
+// @desc Returns all of a user's teams as JSON objects
+// @access Public
+// @params: id = userId
+loadneticRoutes.route('/getProjects/:teamId').get(function(req, res) {
+    let teamId = req.params.teamId;
+    Teams.findById(teamId, function(err, team) {
+        if(!team){
+            res.status(404).send("Current user not found");
+        } else {
+            let projects = [];
+            let userProjects = team.teamProjects.values();
+            let i = 0;
+            for(let elements of userProjects){
+                Projects.findById(elements, function(err, project) {
+                    if(!project){
+                        res.status(404).send("Project not found");
+                    } else {
+                        projects.push(project);
+                        i++;
+                        if (i === team.teamProjects.length) {
+                            res.status(200).send(projects);
+                        }
+                    }
+                }).catch(err => {
+                    res.status(400).send("Error finding project!");
+                });
+            }
+        }
+    }).catch(err => {
+        res.status(400).send("Error finding current team!");
     });
 });
 

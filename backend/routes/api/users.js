@@ -34,7 +34,6 @@ userRoutes.post("/register", (req, res) => {
                 email: req.body.email,
                 password: req.body.password
             });
-
             // Hash password before saving in database
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
@@ -55,7 +54,6 @@ userRoutes.post("/register", (req, res) => {
 // @access Public
 // @params: req = user JSON email and password
 userRoutes.post("/login", (req, res) => {
-
     // Form validation
     const { errors, isValid } = validateLoginInput(req.body);
 
@@ -69,23 +67,19 @@ userRoutes.post("/login", (req, res) => {
 
     // Find user by email
     User.findOne({ email }).then(user => {
-
         // Check if user exists
         if (!user) {
             return res.status(404).json({ emailnotfound: "Email not found" });
         }
-
         // Check password
         bcrypt.compare(password, user.password).then(isMatch => {
             if (isMatch) {
-
                 // User matched, create JWT Payload
                 const payload = {
                     id: user.id,
                     name: user.name,
                     email: user.email
                 };
-
                 // Sign token
                 jwt.sign(
                     payload,
@@ -119,7 +113,9 @@ userRoutes.route('/').get(function(req, res) {
         } else {
             res.status(200).json(users);
         }
-    });
+    }).catch(err=> {
+        res.status(400).send("Error finding users");
+    });;
 });
 
 // @route GET /users/:id
@@ -134,7 +130,9 @@ userRoutes.route('/:id').get(function(req, res) {
         } else {
             res.status(200).json(user);
         }
-    });
+    }).catch(err=> {
+        res.status(400).send("Error finding user");
+    });;
 });
 
 // @route POST /users/update/:id
@@ -160,7 +158,9 @@ userRoutes.route('/update/:id').post(function(req, res) {
                         res.status(400).send("Update not possible");
                     });
                 }
-            })
+            }).catch(err=> {
+                res.status(400).send("Error finding user");
+            });
         }
     });
 });
@@ -186,7 +186,9 @@ userRoutes.route('/addTeam/:id').post(function(req, res) {
                         res.status(400).send("Team creation not possible!");
                     });
                 }
-            });
+            }).catch(err=> {
+                    res.status(400).send("Error finding user");
+                });
     }).catch(err => {
             res.status(400).send('Adding new team failed');
     });
@@ -219,6 +221,8 @@ userRoutes.route('/getTeams/:id').get(function(req, res) {
                 });
             }
         }
+    }).catch(err=> {
+        res.status(400).send("Error finding user");
     });
 });
 
@@ -244,6 +248,8 @@ userRoutes.route('/hasTeam/:id/:teamId').get(function(req, res){
             }
             res.status(200).send(hasTeam);
         }
+    }).catch(err=> {
+        res.status(400).send("Error finding user");
     });
 });
 

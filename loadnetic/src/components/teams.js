@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import {Link} from "react-router-dom";
 import axios from 'axios';
 
-let createTeam = "/teamProfile/";
+let teamProfile = "/teamProfile/";
 
 const Team = props => (
     <div class="col-4">
-        <h4> <a href={createTeam.concat(props.team._id)}>{props.team.teamName}</a></h4>
+        <h4> <a href={teamProfile.concat(props.team._id)}>{props.team.teamName}</a></h4>
         <p>{props.team.teamDescription}</p>
         <p>Team Size: {props.team.teamSize}</p>
     </div>
@@ -47,8 +47,6 @@ class Teams extends Component {
                 });
             }
         );
-
-        console.log(this.props);
     }
 
     teamsList() {

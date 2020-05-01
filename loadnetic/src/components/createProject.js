@@ -92,20 +92,18 @@ class CreateProject extends Component {
             };
 
             const { match: { params } } = this.props;
-            let route = "http://localhost:4000/users/addProject/";
+            let route = "http://localhost:4000/loadnetic/addProject/";
             route = route.concat(params.teamId.toString());
             axios.post(route, newProject)
                 .then(res => {
                     let teams = "/teamProfile/";
-                    let id = this.props.auth.user.id.toString();
-                    let teamsPath = teams.concat(id);
-                    this.props.history.push(teamsPath);
+                    this.props.history.push(teams.concat(params.teamId.toString()));
                 }).catch(err => {
-                const error = {};
-                error.team = err;
-                this.setState({
-                    errors: error
-                });
+                    const error = {};
+                    error.team = err;
+                    this.setState({
+                        errors: error
+                    });
             });
 
             this.setState({
