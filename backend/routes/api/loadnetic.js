@@ -88,38 +88,4 @@ loadneticRoutes.route('/addProject/:id').post(function(req, res) {
     });
 });
 
-// @route GET /loadnetic/getProjects/:teamId
-// @desc Returns all of a user's teams as JSON objects
-// @access Public
-// @params: id = userId
-loadneticRoutes.route('/getProjects/:teamId').get(function(req, res) {
-    let teamId = req.params.teamId;
-    Teams.findById(teamId, function(err, team) {
-        if(!team){
-            res.status(404).send("Current user not found");
-        } else {
-            let projects = [];
-            let userProjects = team.teamProjects.values();
-            let i = 0;
-            for(let elements of userProjects){
-                Projects.findById(elements, function(err, project) {
-                    if(!project){
-                        res.status(404).send("Project not found");
-                    } else {
-                        projects.push(project);
-                        i++;
-                        if (i === team.teamProjects.length) {
-                            res.status(200).send(projects);
-                        }
-                    }
-                }).catch(err => {
-                    res.status(400).send("Error finding project!");
-                });
-            }
-        }
-    }).catch(err => {
-        res.status(400).send("Error finding current team!");
-    });
-});
-
 module.exports = loadneticRoutes;

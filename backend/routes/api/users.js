@@ -132,7 +132,7 @@ userRoutes.route('/:id').get(function(req, res) {
         }
     }).catch(err=> {
         res.status(400).send("Error finding user");
-    });;
+    });
 });
 
 // @route POST /users/update/:id
@@ -246,7 +246,44 @@ userRoutes.route('/hasTeam/:id/:teamId').get(function(req, res){
                     break;
                 }
             }
-            res.status(200).send(hasTeam);
+            let ret = {};
+            if(hasTeam === true){
+                Teams.findById(teamId, function(err, userTeam){
+                    ret.team = userTeam;
+                    ret.hasTeam = hasTeam;
+                    res.status(200).send(ret);
+
+                }).catch(err=> {
+                    res.status(400).send("Error finding team");
+                });
+
+            } else {
+                ret.hasTeam = hasTeam;
+                ret.team = "null";
+                res.status(200).send(ret);
+            }
+        }
+    }).catch(err=> {
+        res.status(400).send("Error finding user");
+    });
+});
+
+// @route GET /users/name/:id
+// @desc Returns a users name
+// @access Public
+// @params: id = userId
+userRoutes.route('/nameAndEmail/:id').get(function(req, res) {
+    let id = req.params.id;
+    User.findById(id, function(err, user) {
+        if (err) {
+            res.status(400).json("Cannot find user");
+        } else {
+            let retUser = {};
+
+            retUser.name = user.name;
+            retUser.email = user.email;
+
+            res.status(200).json(retUser);
         }
     }).catch(err=> {
         res.status(400).send("Error finding user");

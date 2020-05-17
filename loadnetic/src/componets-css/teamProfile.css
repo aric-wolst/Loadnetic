@@ -1,0 +1,15 @@
+#adminPromote:hover:after {
+    content: "Promote"
+}
+
+#adminPromote:after {
+    content: "      "
+}
+
+#adminDemote:hover:after {
+    content: "Demote"
+}
+
+#adminDemote:after {
+    content: "Admin"
+}
