@@ -26,7 +26,7 @@ loadneticRoutes.route('/').get(function(req, res) {
 // @route GET /loadnetic/:id
 // @desc Returns the team with the specified id
 // @access Public
-// @params: id = teamId
+// @params: req.params.id = teamId
 loadneticRoutes.route('/:id').get(function(req, res) {
 
     let id = req.params.id;
@@ -47,7 +47,7 @@ loadneticRoutes.route('/:id').get(function(req, res) {
 // @route POST /loadnetic/update/:id
 // @desc Updates the specified team
 // @access Public
-// @params: id = teamId, req = team JSON object
+// @params: req.params.id = teamId, req.body = team JSON object
 loadneticRoutes.route('/update/:id').post(function(req, res) {
 
     Teams.findById(req.params.id, function(err, team) {
@@ -73,7 +73,7 @@ loadneticRoutes.route('/update/:id').post(function(req, res) {
 // @route POST /loadnetic/addProject/:id
 // @desc Creates a project and adds it to the specified team's list of projects
 // @access Public
-// @params: id = teamId, req = project JSON object
+// @params: req.params.id = teamId, req.body = project JSON object
 loadneticRoutes.route('/addProject/:id').post(function(req, res) {
 
     let project = new Projects(req.body);
@@ -107,28 +107,58 @@ loadneticRoutes.route('/addProject/:id').post(function(req, res) {
 // @route POST /loadnetic/addMember/:id
 // @desc Adds a user to the team
 // @access Public
-// @params: id = teamId, req = user email JSON object
+// @params: req.params.id = teamId, req.body.email = user email, req.body.admin = true if admin
 loadneticRoutes.route('/addMember/:id').post(function(req, res) {
 
     Users.findOne({ email: req.body.email }).then(user => {
 
-        user.teams.push(req.params.id);
+        if(!user.teams.includes(req.params.id)){
+            user.teams.push(req.params.id);
+        }
 
         user.save().then(user => {
 
             Teams.findById(req.params.id, function(err, team) {
 
-                team.teamMemberId.push(user.id);
+                if(!team.teamMemberId.includes(user.id)){
+                    team.teamMemberId.push(user.id);
+                }
+
+                if(req.body.admin === "true"){
+                    team.teamAdminId.push(user.id);
+                }
 
                 team.save().then(team => {
-                    res.status(200).json("User added!");
+                    res.status(200).send("User added!");
 
                 }).catch(err => {
-                    res.status(400).send("Error adding user");
+
+                    for(let i = 0; i < user.teams.length; i++){
+
+                        if(user.teams[i] === req.params.id){
+                            user.teams.splice(i,1);
+                            break;
+                        }
+                    }
+
+                    user.save().then(
+                        res.status(400).send("Error adding user")
+                    );
                 });
 
             }).catch(err => {
-                res.status(400).send("Error finding current team!");
+
+                for(let i = 0; i < user.teams.length; i++){
+
+                    if(user.teams[i] === req.params.id){
+                        user.teams.splice(i,1);
+                        break;
+                    }
+                }
+
+                user.save().then(
+                    res.status(400).send("Error finding current team!")
+                );
             });
 
         }).catch(err => {
@@ -143,28 +173,36 @@ loadneticRoutes.route('/addMember/:id').post(function(req, res) {
 // @route POST /loadnetic/promote/:id
 // @desc Promotes a user to admin on the team
 // @access Public
-// @params: id = teamId, req = user email JSON object
+// @params: req.params.id = teamId, req.body.email = user email JSON object
 loadneticRoutes.route('/promote/:id').post(function(req, res) {
 
     Users.findOne({ email: req.body.email }).then(user => {
 
-        user.teams.push(req.params.id);
+        if(!user.teams.includes(req.params.id)){
+            user.teams.push(req.params.id);
+        }
 
         user.save().then(user => {
 
             Teams.findById(req.params.id, function(err, team) {
 
-                team.teamAdminId.push(user.id);
+                if(!team.teamAdminId.includes(user.id)){
+                    team.teamAdminId.push(user.id);
+                }
+
+                if(!team.teamMemberId.includes(user.id)){
+                    team.teamMemberId.push(user.id);
+                }
 
                 team.save().then(team => {
                     res.status(200).json("User promoted!");
 
                 }).catch(err => {
-                    res.status(400).send("Error promoting user");
+                        res.status(400).send("Error promoting user")
                 });
 
             }).catch(err => {
-                res.status(400).send("Error finding current team!");
+                    res.status(400).send("Error finding current team!")
             });
 
         }).catch(err => {
@@ -179,18 +217,24 @@ loadneticRoutes.route('/promote/:id').post(function(req, res) {
 // @route POST /loadnetic/demote/:id
 // @desc Demotes a user from admin on the team
 // @access Public
-// @params: id = teamId, req = user email JSON object
+// @params: req.params.id = teamId, req.body.email = user email
 loadneticRoutes.route('/demote/:id').post(function(req, res) {
 
     Users.findOne({ email: req.body.email }).then(user => {
 
-        user.teams.push(req.params.id);
+        if(!user.teams.includes(req.params.id)){
+            user.teams.push(req.params.id);
+        }
 
         user.save().then(user => {
 
             Teams.findById(req.params.id, function(err, team) {
 
                 for(let i = 0; i < team.teamAdminId.length; i ++){
+
+                    if(!team.teamMemberId.includes(user.id)){
+                        team.teamMemberId.push(user.id);
+                    }
 
                     if(team.teamAdminId[i] === user.id){
                         team.teamAdminId.splice(i, 1);
@@ -221,12 +265,18 @@ loadneticRoutes.route('/demote/:id').post(function(req, res) {
 // @route POST /loadnetic/removeMember/:id
 // @desc Removes a user from the team
 // @access Public
-// @params: id = teamId, req = user email JSON object
+// @params: req.params.id = teamId, req.body.email = user email
 loadneticRoutes.route('/removeMember/:id').post(function(req, res) {
 
     Users.findOne({ email: req.body.email }).then(user => {
 
-        user.teams.push(req.params.id);
+        for(let i = 0; i < user.teams.length; i++){
+
+            if(user.teams[i] === req.params.id){
+                user.teams.splice(i,1);
+                break;
+            }
+        }
 
         user.save().then(user => {
 
@@ -240,23 +290,41 @@ loadneticRoutes.route('/removeMember/:id').post(function(req, res) {
                     }
                 }
 
+                for(let i = 0; i < team.teamAdminId.length; i ++){
+
+                    if(team.teamAdminId[i] === user.id){
+                        team.teamAdminId.splice(i, 1);
+                        break;
+                    }
+                }
+
                 team.save().then(team => {
-                    res.status(200).json("User removed!");
+                    res.status(200).send("User removed!");
 
                 }).catch(err => {
-                    res.status(400).send("Error removing user");
+
+                    user.teams.push(req.params.id);
+
+                    user.save.then(
+                        res.status(400).send("Error removing user")
+                    );
                 });
 
             }).catch(err => {
-                res.status(400).send("Error finding current team!");
+
+                user.teams.push(req.params.id);
+
+                user.save.then(
+                    res.status(400).send("Error finding current team!")
+                );
             });
 
         }).catch(err => {
-            res.status(400).send("Error finding user");
+            res.status(400).send("Error adding user");
         });
 
     }).catch(err => {
-        res.status(400).send("Email does not exist");
+        res.status(400).json("Email does not exist");
     });
 });
 

@@ -99,15 +99,21 @@ const Validator = require("validator");
 
             let route = "http://localhost:4000/users/addTeam/";
             route = route.concat(this.props.auth.user.id.toString());
+
             axios.post(route, newTeam)
                 .then(res => {
+
                     let teams = "/teams/";
                     let id = this.props.auth.user.id.toString();
                     let teamsPath = teams.concat(id);
+
                     this.props.history.push(teamsPath);
+
                 }).catch(err => {
+
                     const error = {};
                     error.user = err;
+
                     this.setState({
                         errors: error
                     });

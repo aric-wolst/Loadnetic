@@ -36,7 +36,6 @@ class updateProfile extends Component {
 
     componentWillReceiveProps(nextProps, nextContext) {
         if (nextProps.errors.email) {
-            console.log(nextProps.errors.email);
             this.setState({
                 errors: nextProps.errors
             });
