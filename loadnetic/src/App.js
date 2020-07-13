@@ -65,17 +65,17 @@ class App extends Component {
                     </div>
                     <Route path="/" exact component={Landing} />
                     <Switch>
-                        //Teams
+                        {/*Teams*/}
                         <PrivateRoute exact path="/teams/:id" component={Teams}/>
                         <PrivateRoute exact path="/createTeam/:id" component={CreateTeam} />
                         <PrivateRoute exact path="/teamProfile/:teamId" component={TeamProfile} />
                         <PrivateRoute exact path="/createProject/:teamId" component={CreateProject} />
 
-                        //Profiles
+                        {/*Profiles*/}
                         <PrivateRoute exact path="/profile/:id" component={Profile} />
                         <PrivateRoute exact path="/profile/:id/update" component={updateProfile} />
 
-                        //Projects
+                        {/*Projects*/}
                         <PrivateRoute exact path="/project/:projectId" component={Project} />
                     </Switch>
                     <Route path="/login" component={Login} />

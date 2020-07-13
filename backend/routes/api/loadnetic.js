@@ -110,6 +110,8 @@ loadneticRoutes.route('/addProject/:id').post(function(req, res) {
 // @params: req.params.id = teamId, req.body.email = user email, req.body.admin = true if admin
 loadneticRoutes.route('/addMember/:id').post(function(req, res) {
 
+    console.log("addmember");
+
     Users.findOne({ email: req.body.email }).then(user => {
 
         if(!user.teams.includes(req.params.id)){
@@ -176,6 +178,10 @@ loadneticRoutes.route('/addMember/:id').post(function(req, res) {
 // @params: req.params.id = teamId, req.body.email = user email JSON object
 loadneticRoutes.route('/promote/:id').post(function(req, res) {
 
+    console.log("promote");
+    console.log(req.body.email);
+    console.log(req.params.id);
+
     Users.findOne({ email: req.body.email }).then(user => {
 
         if(!user.teams.includes(req.params.id)){
@@ -219,6 +225,10 @@ loadneticRoutes.route('/promote/:id').post(function(req, res) {
 // @access Public
 // @params: req.params.id = teamId, req.body.email = user email
 loadneticRoutes.route('/demote/:id').post(function(req, res) {
+
+    console.log("demote");
+    console.log(req.body.email);
+    console.log(req.params.id);
 
     Users.findOne({ email: req.body.email }).then(user => {
 
@@ -267,6 +277,8 @@ loadneticRoutes.route('/demote/:id').post(function(req, res) {
 // @access Public
 // @params: req.params.id = teamId, req.body.email = user email
 loadneticRoutes.route('/removeMember/:id').post(function(req, res) {
+
+    console.log("remove");
 
     Users.findOne({ email: req.body.email }).then(user => {
 

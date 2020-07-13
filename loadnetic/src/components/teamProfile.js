@@ -4,39 +4,9 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import "../componets-css/teamProfile.css";
-import classnames from "classnames";
+import TeamMembers from "../teamProfile_components/TeamMembers";
+import ProjectList from "../teamProfile_components/ProjectList";
 const Validator = require("validator");
-
-let projectProfile = "/project/";
-
-const Project = props => (
-    <div className="col-4">
-        <h4> <a href={projectProfile.concat(props.project._id)}>{props.project.projectName}</a></h4>
-        <p>{props.project.projectDescription}</p>
-    </div>
-);
-
-const Team = props => (
-    <tr>
-        <th class="col-3">{props.team.name}</th>
-        <th class="col-3">{props.team.email}</th>
-        {props.team.admin === true ? <th class="col=2"> Admin </th> : <th class="col=4"></th>}
-        {(props.user === true) ?
-            ( props.team.admin === true ?
-                <th class="col-2">
-                    <button className="btn btn-primary"> Demote </button>
-                </th> :
-                <th className="col-2">
-                    <button className="btn btn-primary"> Promote </button>
-                </th>)
-            : <th class="col-2"></th>
-        }
-        {(props.user === true) ?
-            <th class="col-2"><button className="btn btn-primary" > Remove </button></th>
-            : <th class="col-2"></th>
-        }
-    </tr>
-);
 
 class TeamProfile extends Component {
 
@@ -117,8 +87,6 @@ class TeamProfile extends Component {
                                 this.setState({
                                     teamMembers: users
                                 });
-
-                                console.log(this.state.teamMembers)
                             });
                     }
                 }
@@ -127,13 +95,13 @@ class TeamProfile extends Component {
 
     projectsList() {
         return this.state.projects.map(function(currentProject, i){
-            return <Project project={currentProject} key={i} />;
+            return <ProjectList project={currentProject} key={i} />;
         })
     }
 
-    teamList = (admin) => {
+    teamList = (admin, teamId) => {
         return this.state.teamMembers.map(function(member, i){
-            return <Team team={member} key={i} user={admin}/>
+            return <TeamMembers team={member} key={i} user={admin} teamId={teamId} num={i}/>
         })
     };
 
@@ -188,6 +156,14 @@ class TeamProfile extends Component {
 
         if(this.validateNewUser()){
             axios.post(request, data)
+                .then(function(){
+                    this.setState({
+                        newUserEmail: '',
+                        newUserAdmin: false
+                    });
+
+                    window.location.reload();
+                })
                 .catch(err => {
 
                     const error = {};
@@ -197,15 +173,7 @@ class TeamProfile extends Component {
                         errors: error
                     });
                 });
-
-            this.setState({
-                newUserEmail: '',
-                newUserAdmin: false
-            })
-
-            window.location.reload();
         }
-
     }
 
     render() {
@@ -221,44 +189,55 @@ class TeamProfile extends Component {
                     <div className="row">
                         { this.projectsList() }
                     </div>
-                    <Link to={newProject}>
-                        New Project
-                    </Link>
+                    <h4>
+                        <Link to={newProject}>
+                            New Project
+                        </Link>
+                    </h4>
                     <h4>Team Members</h4>
-                    <table>
-                        <tbody>
-                            {this.teamList(this.state.isAdmin)}
-                        </tbody>
-                    </table>
+                        {this.teamList(this.state.isAdmin, params.teamId.toString())}
                     <form onSubmit={this.onSubmit} name={"form"}>
-                        <div className="form-group">
-                            <label>Email </label>
-                            <input  name = "newUserEmail"
-                                    id = "newUserEmail"
-                                    type="text"
-                                    error={this.state.errors.newUserEmail}
-                                    value={this.state.newUserEmail}
-                                    onChange={this.onChangeNewUserEmail}
-                            />
-                            <span className="red-text">
-                                {this.state.errors.newUserEmail}
-                            </span>
-                        </div>
+                        <div className={"row"}>
+                            <div className={"col-4"}><h5>Add Team Member</h5></div>
+                            <div className={"col-4"}>
+                                <div className="form-group">
+                                    <label>Email </label>
+                                    <input  name = "newUserEmail"
+                                            id = "newUserEmail"
+                                            type="text"
+                                            error={this.state.errors.newUserEmail}
+                                            value={this.state.newUserEmail}
+                                            onChange={this.onChangeNewUserEmail}
+                                    />
+                                    <span className="red-text">
+                                        {this.state.errors.newUserEmail}
+                                    </span>
+                                </div>
+                            </div>
 
-                        <div className="form-group">
-                            <label>Admin </label>
-                            <select value={this.state.newUserAdmin} onChange={this.onChangeNewUserAdmin}>
-                                <option value="false">No</option>
-                                <option value="true">Yes</option>
-                            </select>
-                        </div>
+                            <div className={"col-2"}>
+                                <div className={"float-right"}>
+                                    <div className="form-group">
+                                        <label>Admin </label>
+                                        <select value={this.state.newUserAdmin} onChange={this.onChangeNewUserAdmin}>
+                                            <option value="false">No</option>
+                                            <option value="true">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <div className="form-group">
-                            <input type="submit" value="Add User" className="btn btn-primary" />
+                            <div className={"col-2"}>
+                                <div className={"float-right"}>
+                                    <div className="form-group">
+                                        <input type="submit" value="Add User" className="btn btn-primary" />
+                                    </div>
+                                    <span className="red-text">
+                                        {this.state.errors.newUser}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <span className="red-text">
-                                {this.state.errors.newUser}
-                        </span>
                     </form>
                 </div>
             </div>
