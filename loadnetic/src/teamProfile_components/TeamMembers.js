@@ -11,17 +11,19 @@ class TeamMembers extends Component {
 
         this.promoteUser = this.promoteUser.bind(this, this.props.team.email, this.props.teamId);
         this.demoteUser = this.demoteUser.bind(this, this.props.team.email, this.props.teamId);
+        this.removeUser = this.removeUser.bind(this, this.props.team.email, this.props.teamId);
     }
 
     promoteUser = (userEmail, teamId) => {
+        let userId = this.props.auth.user.id;
         return function() {
-            console.log("promote");
+
             const data = {
                 email: userEmail
             };
 
             let request = "http://localhost:4000/loadnetic/promote/";
-            request = request.concat(teamId);
+            request = request.concat(teamId, '/', userId);
 
             axios.post(request, data)
                 .then(function () {
@@ -34,14 +36,35 @@ class TeamMembers extends Component {
     };
 
     demoteUser = (userEmail, teamId) => {
+        let userId = this.props.auth.user.id;
         return function() {
-            console.log("demote");
             const data = {
                 email: userEmail
             };
 
             let request = "http://localhost:4000/loadnetic/demote/";
-            request = request.concat(teamId);
+            request = request.concat(teamId, '/', userId);
+
+            axios.post(request, data)
+                .then(function () {
+                    window.location.reload();
+                })
+                .catch(err => {
+
+                });
+        }
+    };
+
+    removeUser = (userEmail, teamId) => {
+        let userId = this.props.auth.user.id;
+        return function() {
+
+            const data = {
+                email: userEmail
+            };
+
+            let request = "http://localhost:4000/loadnetic/removeMember/";
+            request = request.concat(teamId, '/', userId);
 
             axios.post(request, data)
                 .then(function () {
@@ -54,8 +77,9 @@ class TeamMembers extends Component {
     };
 
     render () {
-        console.log(this.props);
+
         return (
+
             <div className={"row"}>
                 <div className="col-3">{this.props.team.name}</div>
                 {this.props.team.admin === true ? <div className="col-1"> Admin </div> : <div className="col-1"/>}
@@ -77,7 +101,7 @@ class TeamMembers extends Component {
                 {(this.props.user === true) ?
                     <div className="col-2">
                         <div className={"float-right"}>
-                            <button className="btn btn-primary"> Remove</button>
+                            <button className="btn btn-primary" onClick={this.removeUser(this.props.team.email, this.props.teamId)}>Remove</button>
                         </div>
                     </div>
                     : <div className="col-2"><div className={"float-right"}></div></div>

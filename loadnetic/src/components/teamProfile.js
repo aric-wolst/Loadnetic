@@ -152,20 +152,15 @@ class TeamProfile extends Component {
         };
 
         let request = "http://localhost:4000/loadnetic/addMember/";
-        request = request.concat(params.teamId);
+        request = request.concat(params.teamId, '/', this.props.auth.user.id);
 
         if(this.validateNewUser()){
             axios.post(request, data)
-                .then(function(){
-                    this.setState({
-                        newUserEmail: '',
-                        newUserAdmin: false
-                    });
-
-                    window.location.reload();
+                .then( function () {
+                    window.location.reload()
                 })
                 .catch(err => {
-
+                    console.log(err);
                     const error = {};
                     error.newUser = err.response.data;
 
@@ -196,49 +191,51 @@ class TeamProfile extends Component {
                     </h4>
                     <h4>Team Members</h4>
                         {this.teamList(this.state.isAdmin, params.teamId.toString())}
-                    <form onSubmit={this.onSubmit} name={"form"}>
-                        <div className={"row"}>
-                            <div className={"col-4"}><h5>Add Team Member</h5></div>
-                            <div className={"col-4"}>
-                                <div className="form-group">
-                                    <label>Email </label>
-                                    <input  name = "newUserEmail"
-                                            id = "newUserEmail"
-                                            type="text"
-                                            error={this.state.errors.newUserEmail}
-                                            value={this.state.newUserEmail}
-                                            onChange={this.onChangeNewUserEmail}
-                                    />
-                                    <span className="red-text">
-                                        {this.state.errors.newUserEmail}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className={"col-2"}>
-                                <div className={"float-right"}>
+                    {this.state.isAdmin === true ?
+                        (<form onSubmit={this.onSubmit} name={"form"}>
+                            <div className={"row"}>
+                                <div className={"col-4"}><h5>Add Team Member</h5></div>
+                                <div className={"col-4"}>
                                     <div className="form-group">
-                                        <label>Admin </label>
-                                        <select value={this.state.newUserAdmin} onChange={this.onChangeNewUserAdmin}>
-                                            <option value="false">No</option>
-                                            <option value="true">Yes</option>
-                                        </select>
+                                        <label>Email </label>
+                                        <input  name = "newUserEmail"
+                                                id = "newUserEmail"
+                                                type="text"
+                                                error={this.state.errors.newUserEmail}
+                                                value={this.state.newUserEmail}
+                                                onChange={this.onChangeNewUserEmail}
+                                        />
+                                        <span className="red-text">
+                                            {this.state.errors.newUserEmail}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className={"col-2"}>
+                                    <div className={"float-right"}>
+                                        <div className="form-group">
+                                            <label>Admin </label>
+                                            <select value={this.state.newUserAdmin} onChange={this.onChangeNewUserAdmin}>
+                                                <option value="false">No</option>
+                                                <option value="true">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={"col-2"}>
+                                    <div className={"float-right"}>
+                                        <div className="form-group">
+                                            <input type="submit" value="Add User" className="btn btn-primary" />
+                                        </div>
+                                        <span className="red-text">
+                                            {this.state.errors.newUser}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
-
-                            <div className={"col-2"}>
-                                <div className={"float-right"}>
-                                    <div className="form-group">
-                                        <input type="submit" value="Add User" className="btn btn-primary" />
-                                    </div>
-                                    <span className="red-text">
-                                        {this.state.errors.newUser}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                        </form>)
+                    :   <div/>}
                 </div>
             </div>
         )
