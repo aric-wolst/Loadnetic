@@ -58,7 +58,7 @@ class Register extends Component {
     render() {
         return (
             <div>
-                <div class="container">
+                <div className="container">
                     <h3>Register</h3>
                     <form noValidate onSubmit={this.onSubmit}>
                         <div className="form-group">

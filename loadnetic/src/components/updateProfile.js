@@ -123,7 +123,7 @@ class updateProfile extends Component {
 
         return (
             <div>
-                <div class="container">
+                <div className="container">
                     <h3> Update {user.name}'s Profile </h3>
                     <form onSubmit={this.onSubmit} name={"form"}>
                         <div className="form-group">

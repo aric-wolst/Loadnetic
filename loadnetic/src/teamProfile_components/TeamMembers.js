@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent as e, Component} from "react";
+import React, {Component} from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";

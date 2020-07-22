@@ -133,7 +133,7 @@ const Validator = require("validator");
 
         return (
             <div>
-                <div class="container">
+                <div className="container">
                     <h3>Create a New Team</h3>
                     <form onSubmit={this.onSubmit} name={"form"}>
                         <div className="form-group">

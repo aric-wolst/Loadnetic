@@ -30,7 +30,7 @@ class Profile extends Component {
 
         return (
             <div>
-                <div class="container">
+                <div className="container">
                     <h3>{user.name}</h3>
                     <h4>{user.email}</h4>
                     <div>

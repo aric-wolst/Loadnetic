@@ -7,7 +7,7 @@ import axios from 'axios';
 let teamProfile = "/teamProfile/";
 
 const Team = props => (
-    <div class="col-4">
+    <div className="col-4">
         <h4> <a href={teamProfile.concat(props.team._id)}>{props.team.teamName}</a></h4>
         <p>{props.team.teamDescription}</p>
         <p>Team Size: {props.team.teamSize}</p>
@@ -63,9 +63,9 @@ class Teams extends Component {
 
         return (
             <div>
-                <div class="container">
+                <div className="container">
                     <h3>{user.name}'s Teams</h3>
-                    <div class="row">
+                    <div className="row">
                         { this.teamsList() }
                     </div>
                     <Link to={createTeam}>

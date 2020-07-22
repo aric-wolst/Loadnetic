@@ -63,7 +63,7 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <div class="container">
+                <div className="container">
                     <h3>Login</h3>
                     <form noValidate onSubmit={this.onSubmit}>
                         <div className="form-group">
