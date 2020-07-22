@@ -25,8 +25,11 @@ class updateProfile extends Component {
         const { match: { params } } = this.props;
 
         if (this.props.auth.user.id !== params.id) {
+
             this.props.history.push("/login");
+
         } else {
+
             this.setState({
                 email: this.props.auth.user.email,
                 name: this.props.auth.user.name
@@ -35,12 +38,22 @@ class updateProfile extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextContext) {
+
         if (nextProps.errors.email) {
+
             this.setState({
                 errors: nextProps.errors
             });
+
         } else {
-            this.props.logoutUser();
+
+            this.setState({
+                errors: {}
+            });
+
+            let path = "/profile/";
+
+            this.props.history.push(path.concat(this.props.auth.user.id));
         }
     };
 
@@ -96,7 +109,8 @@ class updateProfile extends Component {
         postRoute = postRoute.concat(user.id.toString());
 
         if(this.validate()) {
-            this.props.updateCurrentUser(user, postRoute);
+
+            this.props.updateCurrentUser(user, postRoute)
         }
 
     }

@@ -153,7 +153,7 @@ userRoutes.route('/:id').get(function(req, res) {
 // @route POST /users/update/:id
 // @desc Updates a users email and name
 // @access Public
-// @params: req = user JSON object id = userId
+// @params: req = user JSON object, id = userId
 userRoutes.route('/update/:id').post(function(req, res) {
 
     User.findOne({ email: req.body.email }).then(dupUser => {

@@ -46,14 +46,18 @@ export const loginUser = userData => dispatch => {
 
 export const updateCurrentUser = (userData, postRoute) => dispatch => {
 
-    axios.post(postRoute, userData).then(
-        dispatch(setCurrentUser(userData))
-    ).catch(err =>
-        dispatch({
-            type: GET_ERRORS,
-            payload: err.response.data
+    axios.post(postRoute, userData)
+        .then( ret => {
+            dispatch(setCurrentUser(userData));
         })
-    );
+        .catch(err => {
+            console.log("err");
+            console.log(err);
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            });
+    });
 };
 
 // Set logged in user
