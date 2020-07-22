@@ -174,7 +174,27 @@ userRoutes.route('/update/:id').post(function(req, res) {
                     user.name = req.body.name;
 
                     user.save().then(user => {
-                        res.status(200).json('Name and email updated!');
+
+                        const payload = {
+                            id: user.id,
+                            name: user.name,
+                            email: user.email
+                        };
+
+                        // Sign token
+                        jwt.sign(
+                            payload,
+                            keys.secretOrKey,
+                            {
+                                expiresIn: 28800 //  8 hours
+                            },
+                            (err, token) => {
+                                res.status(200).json({
+                                    success: true,
+                                    token: "Bearer " + token
+                                });
+                            }
+                        );
                     }).catch(err => {
                         res.status(400).send("Update not possible");
                     });

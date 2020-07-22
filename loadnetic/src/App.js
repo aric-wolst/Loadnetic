@@ -38,14 +38,24 @@ if (localStorage.jwtToken) {
 
     // Check for expired token
     const currentTime = Date.now() / 1000; // to get in milliseconds
+
     if (decoded.exp < currentTime) {
+
         // Logout user
         store.dispatch(logoutUser());
+
         // Redirect to login
         window.location.href = "./login";
     }
-}
 
+} else{
+
+    // Logout user
+    store.dispatch(logoutUser());
+
+    // Redirect to login
+    window.location.href = "./login";
+}
 
 class App extends Component {
     render() {

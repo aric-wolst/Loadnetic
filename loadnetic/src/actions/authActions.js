@@ -25,6 +25,7 @@ export const loginUser = userData => dispatch => {
             // Save to localStorage
             // Set token to localStorage
             const { token } = res.data;
+            console.log(token);
             localStorage.setItem("jwtToken", token);
 
             // Set token to Auth header
@@ -47,8 +48,23 @@ export const loginUser = userData => dispatch => {
 export const updateCurrentUser = (userData, postRoute) => dispatch => {
 
     axios.post(postRoute, userData)
-        .then( ret => {
-            dispatch(setCurrentUser(userData));
+        .then( res => {
+
+            // Save to localStorage
+            // Set token to localStorage
+            const { token } = res.data;
+            console.log(token);
+            localStorage.setItem("jwtToken", token);
+
+            // Set token to Auth header
+            setAuthToken(token);
+
+            // Decode token to get user data
+            const decoded = jwt_decode(token);
+
+            // Set current user
+            dispatch(setCurrentUser(decoded));
+
         })
         .catch(err => {
             console.log("err");
@@ -62,6 +78,7 @@ export const updateCurrentUser = (userData, postRoute) => dispatch => {
 
 // Set logged in user
 export const setCurrentUser = decoded => {
+
     return {
         type: SET_CURRENT_USER,
         payload: decoded

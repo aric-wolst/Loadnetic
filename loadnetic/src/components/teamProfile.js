@@ -29,10 +29,11 @@ class TeamProfile extends Component {
     }
 
     componentDidMount() {
+
         const { match: { params } } = this.props;
 
         let hasTeamsRoute = "http://localhost:4000/users/hasTeam/";
-        hasTeamsRoute = hasTeamsRoute.concat(this.props.auth.user.id.toString(), "/", params.teamId);
+        hasTeamsRoute = hasTeamsRoute.concat(this.props.auth.user.id, "/", params.teamId);
 
         axios.get(hasTeamsRoute)
             .then(ret => {
@@ -64,7 +65,7 @@ class TeamProfile extends Component {
                     let teamMembers = this.state.team.teamMemberId;
                     let teamAdmins = this.state.team.teamAdminId;
 
-                    if(teamAdmins.includes(this.props.auth.user.id.toString())){
+                    if(teamAdmins.includes(this.props.auth.user.id)){
                         this.setState({
                             isAdmin: true
                         });

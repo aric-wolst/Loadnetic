@@ -22,6 +22,7 @@ class updateProfile extends Component {
     }
 
     componentDidMount() {
+
         const { match: { params } } = this.props;
 
         if (this.props.auth.user.id !== params.id) {
@@ -51,9 +52,7 @@ class updateProfile extends Component {
                 errors: {}
             });
 
-            let path = "/profile/";
-
-            this.props.history.push(path.concat(this.props.auth.user.id));
+            this.props.logoutUser();
         }
     };
 

@@ -7,11 +7,13 @@ import {Link} from "react-router-dom";
 class Profile extends Component {
 
     componentDidMount() {
+
         const { match: { params } } = this.props;
 
         if (this.props.auth.user.id !== params.id) {
             this.props.history.push("/login");
         }
+
     }
 
     onLogoutClick = e => {

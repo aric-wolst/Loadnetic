@@ -26,6 +26,7 @@ class Teams extends Component {
     }
 
     componentDidMount() {
+
         const { match: { params } } = this.props;
 
         if (this.props.auth.user.id !== params.id) {
@@ -47,6 +48,7 @@ class Teams extends Component {
                 });
             }
         );
+
     }
 
     teamsList() {
