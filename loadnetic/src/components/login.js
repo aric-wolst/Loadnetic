@@ -67,6 +67,7 @@ class Login extends Component {
                     <h3>Login</h3>
                     <form noValidate onSubmit={this.onSubmit}>
                         <div className="form-group">
+                            <label htmlFor="email">Email </label>
                             <input
                                 onChange={this.onChange}
                                 value={this.state.email}
@@ -77,13 +78,13 @@ class Login extends Component {
                                 invalid: this.state.errors.email || this.state.errors.emailnotfound
                             })}
                             />
-                            <label htmlFor="email">Email</label>
                             <span className="red-text">
                                 {this.state.errors.email}
                                 {this.state.errors.emailnotfound}
                             </span>
                         </div>
                         <div className="form-group">
+                            <label htmlFor="password">Password </label>
                             <input
                                 onChange={this.onChange}
                                 value={this.state.password}
@@ -94,7 +95,6 @@ class Login extends Component {
                                     invalid: this.state.errors.password || this.state.errors.passwordincorrect
                                 })}
                             />
-                            <label htmlFor="password">Password</label>
                             <span className="red-text">
                                 {this.state.errors.password}
                                 {this.state.errors.passwordincorrect}

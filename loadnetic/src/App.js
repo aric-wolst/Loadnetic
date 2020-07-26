@@ -48,13 +48,15 @@ if (localStorage.jwtToken) {
         window.location.href = "./login";
     }
 
-} else{
+} else if (window.location.pathname !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/') {
+    console.log(window.location.pathname);
 
     // Logout user
     store.dispatch(logoutUser());
 
     // Redirect to login
     window.location.href = "./login";
+
 }
 
 class App extends Component {

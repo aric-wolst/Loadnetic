@@ -25,7 +25,7 @@ export const loginUser = userData => dispatch => {
             // Save to localStorage
             // Set token to localStorage
             const { token } = res.data;
-            console.log(token);
+
             localStorage.setItem("jwtToken", token);
 
             // Set token to Auth header
@@ -53,7 +53,7 @@ export const updateCurrentUser = (userData, postRoute) => dispatch => {
             // Save to localStorage
             // Set token to localStorage
             const { token } = res.data;
-            console.log(token);
+
             localStorage.setItem("jwtToken", token);
 
             // Set token to Auth header
@@ -67,7 +67,7 @@ export const updateCurrentUser = (userData, postRoute) => dispatch => {
 
         })
         .catch(err => {
-            console.log("err");
+
             console.log(err);
             dispatch({
                 type: GET_ERRORS,
