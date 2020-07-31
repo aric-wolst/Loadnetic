@@ -45,17 +45,13 @@ if (localStorage.jwtToken) {
         store.dispatch(logoutUser());
 
         // Redirect to login
-        window.location.href = "./login";
+        window.location.href = '/login';
     }
 
 } else if (window.location.pathname !== '/login' && window.location.pathname !== '/register' && window.location.pathname !== '/') {
-    console.log(window.location.pathname);
 
     // Logout user
     store.dispatch(logoutUser());
-
-    // Redirect to login
-    window.location.href = "./login";
 
 }
 
@@ -88,7 +84,7 @@ class App extends Component {
                         <PrivateRoute exact path="/profile/:id/update" component={updateProfile} />
 
                         {/*Projects*/}
-                        <PrivateRoute exact path="/project/:projectId" component={Project} />
+                        <PrivateRoute exact path="/team/:teamId/project/:projectId" component={Project} />
                     </Switch>
                     <Route path="/login" component={Login} />
                     <Route path="/register" component={Register} />

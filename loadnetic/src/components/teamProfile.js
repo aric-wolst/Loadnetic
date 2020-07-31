@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import "../componets-css/teamProfile.css";
 import TeamMembers from "../teamProfile_components/TeamMembers";
 import ProjectList from "../teamProfile_components/ProjectList";
+import {setCurrentTeam} from "../actions/teamActions";
 const Validator = require("validator");
 
 class TeamProfile extends Component {
@@ -21,7 +22,6 @@ class TeamProfile extends Component {
             projects: [],
             teamMembers: [],
             isAdmin: false,
-            team: {},
             errors: {},
             newUserEmail: '',
             newUserAdmin: false
@@ -42,12 +42,11 @@ class TeamProfile extends Component {
                     this.props.history.push("/login");
 
                 } else {
-                    this.setState({
-                        team: ret.data.team,
-                    });
+
+                    this.props.setCurrentTeam(ret.data.team);
 
                     const projects = [];
-                    let userProjects = this.state.team.teamProjects;
+                    let userProjects = this.props.team.team.teamProjects;
                     let request = "http://localhost:4000/projects/";
 
                     for (let i = 0; i < userProjects.length; i++) {
@@ -62,8 +61,8 @@ class TeamProfile extends Component {
                     }
 
                     const users = [];
-                    let teamMembers = this.state.team.teamMemberId;
-                    let teamAdmins = this.state.team.teamAdminId;
+                    let teamMembers = this.props.team.team.teamMemberId;
+                    let teamAdmins = this.props.team.team.teamAdminId;
 
                     if(teamAdmins.includes(this.props.auth.user.id)){
                         this.setState({
@@ -95,8 +94,10 @@ class TeamProfile extends Component {
     }
 
     projectsList() {
+        let teamId = this.props.team.team._id;
+
         return this.state.projects.map(function(currentProject, i){
-            return <ProjectList project={currentProject} key={i} />;
+            return <ProjectList project={currentProject} team={teamId} key={i} />;
         })
     }
 
@@ -145,15 +146,13 @@ class TeamProfile extends Component {
         //Stops page from reloading on submit
         e.preventDefault();
 
-        const { match: { params } } = this.props;
-
         const data = {
             admin: this.state.newUserAdmin,
             email: this.state.newUserEmail
         };
 
         let request = "http://localhost:4000/loadnetic/addMember/";
-        request = request.concat(params.teamId, '/', this.props.auth.user.id);
+        request = request.concat(this.props.team.team._id, '/', this.props.auth.user.id);
 
         if(this.validateNewUser()){
             axios.post(request, data)
@@ -173,14 +172,14 @@ class TeamProfile extends Component {
     }
 
     render() {
-        const { match: { params } } = this.props;
         let newProject = "/createProject/";
-        newProject = newProject.concat(params.teamId.toString());
+        newProject = newProject.concat(this.props.team.team._id);
 
         return (
             <div>
                 <div className="container">
-                    <h3>{this.state.team.teamName}</h3>
+                    <h3>{this.props.team.team.teamName}</h3>
+                    <h5>{this.props.team.team.teamDescription}</h5>
                     <h4>Projects</h4>
                     <div className="row">
                         { this.projectsList() }
@@ -191,7 +190,7 @@ class TeamProfile extends Component {
                         </Link>
                     </h4>
                     <h4>Team Members</h4>
-                        {this.teamList(this.state.isAdmin, params.teamId.toString())}
+                        {this.teamList(this.state.isAdmin, this.props.team.team._id)}
                     {this.state.isAdmin === true ?
                         (<form onSubmit={this.onSubmit} name={"form"}>
                             <div className={"row"}>
@@ -244,13 +243,17 @@ class TeamProfile extends Component {
 }
 
 TeamProfile.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    team: PropTypes.object.isRequired,
+    setCurrentTeam: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    team: state.team
 });
 
 export default connect(
     mapStateToProps,
+    { setCurrentTeam }
 )(TeamProfile);
