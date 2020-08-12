@@ -362,5 +362,62 @@ loadneticRoutes.route('/removeMember/:id/:userId').post(function(req, res) {
     });
 });
 
+// @route GET /loadnetic/hasProject/:projectId/:teamId
+// @desc Returns project if the user is part of the project, which is part of the team
+// @access Public
+// @params: id = userId, projectId = projectId, teamId = teamId
+loadneticRoutes.route('/hasProject/:id/:teamId/:projectId').get(function(req, res) {
+
+    let projectId = req.params.projectId;
+    let teamId = req.params.teamId;
+    let id = req.params.id;
+
+    Teams.findById(teamId, function (err, team) {
+
+        if(!team){
+
+            res.status(404).send("Current team not found");
+
+        } else {
+
+            let projects = team.teamProjects.values();
+            let hasProject = projects.includes(projectId);
+            let ret = {};
+
+            if(hasProject){
+
+                Projects.findById(projectId, function(err, project) {
+
+                    hasProject = project.projectMemberId.values().includes(id);
+
+                    if(hasProject){
+
+                        ret.project = project;
+                        ret.hasProject = hasProject;
+                        res.status(200).send(ret);
+
+                    } else {
+                        ret.hasProject = hasProject;
+                        ret.project = "null";
+                        res.status(200).send(ret);
+                    }
+
+                }).catch(err => {
+                    res.status(400).send("Error finding project")
+                });
+
+            } else {
+                ret.hasProject = hasProject;
+                ret.project = "null";
+                res.status(200).send(ret);
+            }
+        }
+
+    }).catch(err => {
+        res.status(400).send("Error finding team")
+    });
+
+});
+
 
 module.exports = loadneticRoutes;
