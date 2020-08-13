@@ -43,6 +43,9 @@ class TeamProfile extends Component {
 
                 } else {
 
+                    let null_data = {};
+                    this.props.setCurrentProject(null_data);
+
                     this.props.setCurrentTeam(ret.data.team);
 
                     const projects = [];

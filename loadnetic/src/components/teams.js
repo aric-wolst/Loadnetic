@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {Link} from "react-router-dom";
 import axios from 'axios';
+import {setCurrentTeam} from "../actions/teamActions";
+import {setCurrentProject} from "../actions/projectActions";
 
 let teamProfile = "/teamProfile/";
 
@@ -26,6 +28,10 @@ class Teams extends Component {
     }
 
     componentDidMount() {
+
+        let null_data = {};
+        this.props.setCurrentTeam(null_data);
+        this.props.setCurrentProject(null_data);
 
         const { match: { params } } = this.props;
 
@@ -71,7 +77,7 @@ class Teams extends Component {
                         { this.teamsList() }
                     </div>
                     <Link to={createTeam}>
-                        New Team
+                        <h4> New Team </h4>
                     </Link>
                 </div>
             </div>
@@ -80,13 +86,20 @@ class Teams extends Component {
 }
 
 Teams.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    team: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
+    setCurrentTeam: PropTypes.func.isRequired,
+    setCurrentProject: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    team: state.team,
+    project: state.project
 });
 
 export default connect(
     mapStateToProps,
+    { setCurrentTeam, setCurrentProject }
 )(Teams);

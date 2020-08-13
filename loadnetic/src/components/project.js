@@ -16,15 +16,34 @@ class Project extends Component {
         axios.get(hasTeamsRoute)
             .then(ret => {
 
-                if (ret.data.hasTeam === false) {
+                if (!ret.data.hasTeam) {
 
                     this.props.history.push("/login");
 
                 } else {
 
-                    this.props.setCurrentTeam(ret.data.team);
+                    let hasProjectRoute = "http://localhost:4000/loadnetic/hasProject/";
+                    hasProjectRoute = hasProjectRoute.concat(this.props.auth.user.id, "/", params.teamId, "/", params.projectId);
+
+                    axios.get(hasProjectRoute)
+                        .then(retVal => {
+
+                            if(!retVal.data.hasProject) {
+
+                                this.props.history.push("/login");
+
+                            } else {
+
+                                this.props.setCurrentTeam(ret.data.team);
+
+                                this.props.setCurrentProject(retVal.data.project);
+
+                            }
+                        })
                 }
-            });
+            }).catch(err => {
+
+        });
     }
 
     render() {

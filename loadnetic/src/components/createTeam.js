@@ -4,6 +4,9 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {Link} from "react-router-dom";
 import classnames from "classnames";
+import {logoutUser} from "../actions/authActions";
+import {setCurrentTeam} from "../actions/teamActions";
+import {setCurrentProject} from "../actions/projectActions";
 const Validator = require("validator");
 
 //Page that creates a team
@@ -28,6 +31,11 @@ const Validator = require("validator");
     }
 
      componentDidMount() {
+
+         let null_data = {};
+         this.props.setCurrentTeam(null_data);
+         this.props.setCurrentProject(null_data);
+
          const { match: { params } } = this.props;
 
          if (this.props.auth.user.id !== params.id) {
@@ -197,13 +205,20 @@ const Validator = require("validator");
 }
 
 CreateTeam.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    team: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
+    setCurrentTeam: PropTypes.func.isRequired,
+    setCurrentProject: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    team: state.team,
+    project: state.project
 });
 
 export default connect(
     mapStateToProps,
+    { setCurrentTeam, setCurrentProject }
 )(CreateTeam);

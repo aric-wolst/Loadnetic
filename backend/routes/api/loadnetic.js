@@ -381,14 +381,27 @@ loadneticRoutes.route('/hasProject/:id/:teamId/:projectId').get(function(req, re
         } else {
 
             let projects = team.teamProjects.values();
-            let hasProject = projects.includes(projectId);
+            let hasProject = false;
+            for(let project of projects){
+                if(project === projectId){
+                    hasProject = true;
+                    break;
+                }
+            }
             let ret = {};
 
             if(hasProject){
 
                 Projects.findById(projectId, function(err, project) {
 
-                    hasProject = project.projectMemberId.values().includes(id);
+                    let members = project.projectMemberId.values();
+                    let hasProject = false;
+                    for(let member of members){
+                        if(member === id){
+                            hasProject = true;
+                            break;
+                        }
+                    }
 
                     if(hasProject){
 
@@ -397,6 +410,7 @@ loadneticRoutes.route('/hasProject/:id/:teamId/:projectId').get(function(req, re
                         res.status(200).send(ret);
 
                     } else {
+
                         ret.hasProject = hasProject;
                         ret.project = "null";
                         res.status(200).send(ret);

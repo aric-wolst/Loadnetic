@@ -4,6 +4,8 @@ import {connect} from "react-redux";
 import {updateCurrentUser, logoutUser} from "../actions/authActions";
 import {Link} from "react-router-dom";
 import classnames from "classnames";
+import {setCurrentTeam} from "../actions/teamActions";
+import {setCurrentProject} from "../actions/projectActions";
 const Validator = require("validator");
 
 class updateProfile extends Component {
@@ -22,6 +24,10 @@ class updateProfile extends Component {
     }
 
     componentDidMount() {
+
+        let null_data = {};
+        this.props.setCurrentTeam(null_data);
+        this.props.setCurrentProject(null_data);
 
         const { match: { params } } = this.props;
 
@@ -174,15 +180,21 @@ updateProfile.propTypes = {
     updateCurrentUser: PropTypes.func.isRequired,
     logoutUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired
+    errors: PropTypes.object.isRequired,
+    team: PropTypes.object.isRequired,
+    project: PropTypes.object.isRequired,
+    setCurrentTeam: PropTypes.func.isRequired,
+    setCurrentProject: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
     auth: state.auth,
-    errors: state.errors
+    errors: state.errors,
+    team: state.team,
+    project: state.project
 });
 
 export default connect(
     mapStateToProps,
-    { updateCurrentUser, logoutUser }
+    { updateCurrentUser, logoutUser, setCurrentTeam, setCurrentProject  }
 )(updateProfile);

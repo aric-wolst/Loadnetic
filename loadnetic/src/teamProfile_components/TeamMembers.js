@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import { withRouter } from "react-router-dom";
 import axios from "axios";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
@@ -120,4 +121,4 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-)(TeamMembers);
+)(withRouter(TeamMembers));
